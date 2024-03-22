@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class Employee {
     private static int nextId = 1;
-//asdas
     private final int id;
     private final Date creationDate;
     private Date modificationDate;
