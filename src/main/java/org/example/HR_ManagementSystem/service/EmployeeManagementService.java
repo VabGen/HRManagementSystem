@@ -1,35 +1,46 @@
 package org.example.HR_ManagementSystem.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.HR_ManagementSystem.entity.Employee;
 import org.example.HR_ManagementSystem.entity.Position;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class EmployeeManagementService {
+public class EmployeeManagementService extends PositionManagementService {
     private final List<Employee> employees;
-    private final List<Position> positions;
+    private static EmployeeManagementService employeeManagementServiceInstance;
+    private final PositionManagementService positionManagementService;
+    private final ObjectMapper objectMapper;
+    Scanner scanner = new Scanner(System.in);
 
-    public EmployeeManagementService() {
+    private EmployeeManagementService() {
+        this.positionManagementService = PositionManagementService.getInstance();
         employees = new ArrayList<>();
-        positions = new ArrayList<>();
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
     }
 
-    public void createPosition(int id, String name) {
-        for (Position position : positions) {
-            if (position.getName().equals(name)) {
-                System.out.println("Должность с таким именем уже существует.");
-                return;
-            }
+    public static EmployeeManagementService getInstance() {
+        if (employeeManagementServiceInstance == null) {
+            employeeManagementServiceInstance = new EmployeeManagementService();
         }
-        Position newPosition = new Position(id, name);
-        positions.add(newPosition);
-        System.out.println("Должность успешно создана: " + newPosition);
+        return employeeManagementServiceInstance;
     }
 
-
-    public void createEmployee(String lastName, String firstName, String middleName, Position position) {
-        Employee employee = new Employee(lastName, firstName, middleName, position);
+    public void createEmployee(String lastName, String firstName, String middleName, int positionId) {
+        Employee employee = new Employee(lastName, firstName, middleName, positionId);
         employees.add(employee);
     }
 
@@ -43,16 +54,19 @@ public class EmployeeManagementService {
         }
     }
 
-    public void printEmployee(int id) {
+    public void printEmployee(int id) throws JsonProcessingException {
         Employee employee = findEmployeeById(id);
         if (employee != null) {
-            System.out.println(employee.toJsonString());
+            Employee newEmployee = new Employee(employee);
+            Position position = positionManagementService.findPositionById(newEmployee.getPositionId());
+            newEmployee.setPosition(position);
+            System.out.println(objectMapper.writeValueAsString(newEmployee));
         } else {
             System.out.println("Сотрудник не найден.");
         }
     }
 
-    public void printEmployeesSortedByLastName() {
+    public void printEmployeesSortedByLastName() throws JsonProcessingException {
         if (employees.isEmpty()) {
             System.out.println("Список сотрудников пуст.");
             return;
@@ -60,24 +74,96 @@ public class EmployeeManagementService {
 
         List<Employee> sortedEmployees = new ArrayList<>(employees);
         sortedEmployees.sort((e1, e2) -> e1.getLastName().compareToIgnoreCase(e2.getLastName()));
-
-        for (Employee employee : sortedEmployees) {
-            System.out.println(employee.toJsonString());
-        }
+        System.out.println(objectMapper.writeValueAsString(sortedEmployees));
     }
 
-    public void printEmployeesByFilter(String filter) {
+    public void searchByFullName() throws JsonProcessingException {
+        System.out.println("Введите данные для поиска сотрудников:");
+        String fullName = scanner.nextLine();
         if (employees.isEmpty()) {
             System.out.println("Список сотрудников пуст.");
             return;
         }
 
-        for (Employee employee : employees) {
-            if (employee.getLastName().contains(filter) || employee.getFirstName().contains(filter) ||
-                    employee.getMiddleName().contains(filter) || employee.getPosition().getName().contains(filter)) {
-                System.out.println(employee.toJsonString());
+        List<Employee> list = new ArrayList<>();
+
+        employees.forEach(e -> {
+            boolean containsLastName = e.getLastName().contains(fullName);
+            boolean containsFirstName = e.getFirstName().contains(fullName);
+            boolean containsMiddleName = e.getMiddleName().contains(fullName);
+
+            if (containsLastName || containsFirstName || containsMiddleName) {
+                list.add(e);
+            }
+        });
+
+        System.out.println(objectMapper.writeValueAsString(list));
+    }
+
+    private Instant validateDate() {
+        boolean b = true;
+        while (b) {
+            try {
+                b = false;
+                return Instant.parse(scanner.nextLine());
+            } catch (Exception e) {
+                System.out.println("Неверный формат даты");
             }
         }
+        return null;
+    }
+
+    public void searchByCreationDate() throws JsonProcessingException {
+        //2024-03-26T00:00:00Z
+        System.out.println("Формат даты: \"yyyy-MM-ddTHH:mm:ssZ\"");
+        System.out.println("Дата с:");
+        Instant fromDate = validateDate();
+        System.out.println("Дата по:");
+        Instant toDate = validateDate();
+        if (fromDate == null || toDate == null) {
+            return;
+        }
+        if (employees.isEmpty()) {
+            System.out.println("Список сотрудников пуст.");
+            return;
+        }
+        List<Employee> list = new ArrayList<>();
+        for (Employee employee : employees) {
+            if ((fromDate.isBefore(employee.getCreationDate()) || fromDate.equals(employee.getCreationDate())) &&
+                    (toDate.isAfter(employee.getCreationDate()) || toDate.equals(employee.getCreationDate()))) {
+                list.add(employee);
+            }
+        }
+        System.out.println(objectMapper.writeValueAsString(list));
+    }
+
+    private Date parseDate(String dateString) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            return formatter.parse(dateString);
+        } catch (ParseException e) {
+            System.out.println("Ошибка при разборе даты. Проверьте правильность формата: \"dd.MM.yyyy\"");
+            return null;
+        }
+    }
+
+    public void searchByPosition() throws JsonProcessingException {
+        System.out.println("Введите данные для поиска сотрудников:");
+        String positionFilter = scanner.nextLine();
+        if (employees.isEmpty()) {
+            System.out.println("Список сотрудников пуст.");
+            return;
+        }
+        List<Employee> list = new ArrayList<>();
+        for (Employee employee : employees) {
+            if (employee.getPositionId() != null) {
+                Position position = positionManagementService.findPositionById(employee.getPositionId());
+                if (position.getName().contains(positionFilter)) {
+                    list.add(employee);
+                }
+            }
+        }
+        System.out.println(objectMapper.writeValueAsString(list));
     }
 
     public void terminateEmployee(int id) {
@@ -94,5 +180,9 @@ public class EmployeeManagementService {
             }
         }
         return null;
+    }
+
+    public List<Employee> findAllByPositionId(Integer positionId) {
+        return employees.stream().filter(e -> e.getPositionId().equals(positionId)).collect(Collectors.toList());
     }
 }

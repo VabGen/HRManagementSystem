@@ -1,21 +1,22 @@
 package org.example.HR_ManagementSystem.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.HR_ManagementSystem.entity.Position;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class ShowMenuEmployee extends ShowMenu {
     boolean running = true;
-    int choice = 0;
-
-    EmployeeManagementService system = new EmployeeManagementService();
     Scanner scanner = new Scanner(System.in);
 
-    @Override
-    public void doDisplay() {
-        display();
+    private final EmployeeManagementService employeeManagementService;
 
+    public ShowMenuEmployee() {
+        this.employeeManagementService = EmployeeManagementService.getInstance();
+    }
+
+    @Override
+    public void doDisplay() throws JsonProcessingException {
         while (running) {
             System.out.println("1. Создать сотрудника");
             System.out.println("2. Изменить данные сотрудника");
@@ -23,58 +24,42 @@ public class ShowMenuEmployee extends ShowMenu {
             System.out.println("4. Вывести список сотрудников, отсортированный по фамилии");
             System.out.println("5. Вывести список сотрудников по фильтру");
             System.out.println("6. Уволить сотрудника");
-            System.out.println("7. Выйти из программы");
-            try {
-                choice = Integer.parseInt(scanner.nextLine().trim());
-                int[] validChoices = {1, 2, 3, 4, 5, 6, 7};
-                if (Arrays.stream(validChoices).noneMatch(x -> x == choice)) {
-                    System.out.println(ANSI_RED + "== Хотите продолжить работу с программой? (y/n)" + ANSI_RESET);
-                    String continueChoice = scanner.nextLine().trim().toLowerCase();
-                    if (!continueChoice.equals("y")) {
-                        running = false;
-                    }
-                }
-            } catch (NumberFormatException e) {
-                System.out.println(e.getMessage() + "\n" + ANSI_RED + "Введите корректное число от 1 до 7 \n" + ANSI_YELLOW + "Попробуйте еще раз." + ANSI_RESET);
-                System.out.println("***********************************************************");
-            }
+            System.out.println("7. Назад к основному меню");
 
-            switch (Character.toLowerCase(choice)) {
+            int choice = scanner.nextInt();
+
+            switch (choice) {
                 case 1:
-                    createEmployee(system, scanner);
+                    createEmployee();
                     break;
                 case 2:
-                    modifyEmployee(system, scanner);
+                    modifyEmployee();
                     break;
                 case 3:
-                    printEmployee(system, scanner);
+                    printEmployee();
                     break;
                 case 4:
-                    system.printEmployeesSortedByLastName();
+                    printEmployeesSortedByLastName();
                     break;
                 case 5:
-                    printEmployeesByFilter(system, scanner);
+                    printEmployeesByFilter();
                     break;
                 case 6:
-                    terminateEmployee(system, scanner);
+                    terminateEmployee();
                     break;
                 case 7:
-                    running = false;
-                    String horizontalLine = "\u2550".repeat(53);
-                    System.out.println("\u2554" + horizontalLine + "\u2557");
-                    System.out.println("\u2551" + " " + "Спасибо за использование программы. До свидания!" + "    " + "\u2551");
-                    System.out.println("\u255A" + horizontalLine + "\u255D");
+                    new Menu().doDisplay();
                     break;
-
                 default:
-                    System.out.println("Некорректный выбор. Попробуйте еще раз.");
-                    continue;
+                    System.out.println("\n" + ANSI_RED + "Введите корректное число от 1 до 7 \n" + ANSI_YELLOW + "Попробуйте еще раз." + ANSI_RESET);
+                    System.out.println("***********************************************************");
+                    break;
             }
         }
-        scanner.close();
     }
 
-    private static void createEmployee(EmployeeManagementService system, Scanner scanner) {
+    private void createEmployee() throws JsonProcessingException {
+        scanner.nextLine();
         System.out.println("Введите фамилию сотрудника:");
         String lastName = scanner.nextLine();
 
@@ -84,19 +69,16 @@ public class ShowMenuEmployee extends ShowMenu {
         System.out.println("Введите отчество сотрудника:");
         String middleName = scanner.nextLine();
 
-        System.out.println("Введите должность сотрудника:");
-        String positionName = scanner.nextLine();
-
-
-        int id = 1;
-        Position position = new Position(id, positionName);
-        system.createEmployee(lastName, firstName, middleName, position);
+        PositionManagementService.getInstance().printAllPositions();
+        System.out.println("Выберите должность сотрудника:");
+        int positionId = scanner.nextInt();
+        employeeManagementService.createEmployee(lastName, firstName, middleName, positionId);
 
         System.out.println("Сотрудник успешно создан.");
         System.out.println("***********************************************************");
     }
 
-    private static void modifyEmployee(EmployeeManagementService system, Scanner scanner) {
+    private void modifyEmployee() {
         System.out.println("Введите ID сотрудника, данные которого нужно изменить:");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -110,34 +92,63 @@ public class ShowMenuEmployee extends ShowMenu {
         System.out.println("Введите новое отчество сотрудника:");
         String middleName = scanner.nextLine();
 
-        System.out.println("Введите новую должность сотрудника:");
+        System.out.println("Введите должность сотрудника:");
         String positionName = scanner.nextLine();
 
         Position position = new Position(id, positionName);
-        system.modifyEmployee(id, lastName, firstName, middleName, position);
+        employeeManagementService.modifyEmployee(id, lastName, firstName, middleName, position);
 
         System.out.println("Данные сотрудника успешно изменены.");
         System.out.println("***********************************************************");
     }
 
-    private static void printEmployee(EmployeeManagementService system, Scanner scanner) {
+    private void printEmployee() throws JsonProcessingException {
         System.out.println("Введите ID сотрудника, информацию о котором нужно вывести:");
         int id = scanner.nextInt();
         scanner.nextLine();
-        system.printEmployee(id);
+        employeeManagementService.printEmployee(id);
     }
 
-    private static void printEmployeesByFilter(EmployeeManagementService system, Scanner scanner) {
-        System.out.println("Введите фильтр для поиска сотрудников:");
-        String filter = scanner.nextLine();
-        system.printEmployeesByFilter(filter);
+    private void printEmployeesSortedByLastName() throws JsonProcessingException {
+        employeeManagementService.printEmployeesSortedByLastName();
     }
 
-    private static void terminateEmployee(EmployeeManagementService system, Scanner scanner) {
+    private void printEmployeesByFilter() throws JsonProcessingException {
+        scanner.nextLine();
+        while (running) {
+            System.out.println("Введите фильтр для поиска сотрудников:");
+            System.out.println("1: Поиск по Фамилии, Имени, Отчеству");
+            System.out.println("2: Поиск по дате создания");
+            System.out.println("3: Поиск по должности");
+            System.out.println("4: Назад");
+            System.out.println("5: Назад к основному меню");
+            int input = scanner.nextInt();
+            switch (input) {
+                case 1:
+                    employeeManagementService.searchByFullName();
+                    break;
+                case 2:
+                    employeeManagementService.searchByCreationDate();
+                    break;
+                case 3:
+                    employeeManagementService.searchByPosition();
+                    break;
+                case 4:
+                    doDisplay();
+                    break;
+                case 5:
+                    new Menu().doDisplay();
+                    break;
+                default:
+                    System.out.println("Неверный ввод. Попробуйте еще раз.");
+            }
+        }
+    }
+
+    private void terminateEmployee() {
         System.out.println("Введите ID сотрудника, которого нужно уволить:");
         int id = scanner.nextInt();
-        scanner.nextLine();
-        system.terminateEmployee(id);
+        employeeManagementService.terminateEmployee(id);
         System.out.println("Сотрудник успешно уволен.");
     }
 }

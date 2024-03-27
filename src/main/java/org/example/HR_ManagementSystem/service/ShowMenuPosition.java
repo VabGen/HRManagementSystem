@@ -1,19 +1,21 @@
 package org.example.HR_ManagementSystem.service;
 
-import java.util.Arrays;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.util.Scanner;
 
 public class ShowMenuPosition extends ShowMenu {
     private boolean running = true;
-    private int choice = 0;
+    private final PositionManagementService positionManagementService;
+    //    Menu menu = new Menu();
+    private final Scanner scanner = new Scanner(System.in);
 
-    PositionManagementService positionManagementService = new PositionManagementService();
-    private Scanner scanner = new Scanner(System.in);
+    public ShowMenuPosition() {
+        this.positionManagementService = PositionManagementService.getInstance();
+    }
 
     @Override
-    public void doDisplay() {
-        display();
-
+    public void doDisplay() throws JsonProcessingException {
         while (running) {
             System.out.println("Выберите действие:");
             System.out.println("Меню должностей!");
@@ -22,23 +24,10 @@ public class ShowMenuPosition extends ShowMenu {
             System.out.println("3. Удалить должность");
             System.out.println("4. Вывести одну конкретную должность");
             System.out.println("5. Вывести список должностей");
-            System.out.println("6. Вывести сотрудников по фильтру");
-            System.out.println("7. Выйти из программы");
+            System.out.println("6. Вывести должности с вложенными сотрудниками");
+            System.out.println("7. Назад к основному меню");
 
-            try {
-                choice = Integer.parseInt(scanner.nextLine().trim());
-                int[] validChoices = {1, 2, 3, 4, 5, 6, 7};
-                if (Arrays.stream(validChoices).noneMatch(x -> x == choice)) {
-                    System.out.println(ANSI_RED + "== Хотите продолжить работу с программой? (y/n)" + ANSI_RESET);
-                    String continueChoice = scanner.nextLine().trim().toLowerCase();
-                    if (!continueChoice.equals("y")) {
-                        running = false;
-                    }
-                }
-            } catch (NumberFormatException e) {
-                System.out.println(e.getMessage() + "\n" + ANSI_RED + "Введите корректное число от 1 до 7 \n" + ANSI_YELLOW + "Попробуйте еще раз." + ANSI_RESET);
-                System.out.println("***********************************************************");
-            }
+            int choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
@@ -57,20 +46,20 @@ public class ShowMenuPosition extends ShowMenu {
                     printAllPositions();
                     break;
                 case 6:
-                    printEmployeesByFilter();
+                    printPositionsEmployees();
                     break;
                 case 7:
-                    exit();
+                    new Menu().doDisplay();
                     break;
                 default:
-                    System.out.println("Неверный выбор. Пожалуйста, выберите действие из списка.");
-                    continue;
+                    System.out.println("\n" + ANSI_RED + "Введите корректное число от 1 до 7 \n" + ANSI_YELLOW + "Попробуйте еще раз." + ANSI_RESET);
+                    System.out.println("***********************************************************");
+                    break;
             }
         }
-        scanner.close();
     }
 
-    private void createPosition() {
+    protected void createPosition() throws JsonProcessingException {
         System.out.print("Введите имя должности: ");
         String name = scanner.nextLine();
         positionManagementService.createPosition(name);
@@ -93,26 +82,19 @@ public class ShowMenuPosition extends ShowMenu {
         positionManagementService.deletePosition(id);
     }
 
-    private void printPosition() {
+    private void printPosition() throws JsonProcessingException {
         System.out.print("Введите ID должности для вывода: ");
         int id = scanner.nextInt();
         scanner.nextLine();
         positionManagementService.printPosition(id);
     }
 
-    private void printAllPositions() {
+    private void printAllPositions() throws JsonProcessingException {
         positionManagementService.printAllPositions();
     }
 
-    private void printEmployeesByFilter() {
-        System.out.print("Введите фильтр для вывода сотрудников: ");
-        String filter = scanner.nextLine();
-        positionManagementService.printEmployeesByFilter(filter);
-    }
-
-    private void exit() {
-        running = false;
-        System.out.println("Программа завершена.");
+    private void printPositionsEmployees() throws JsonProcessingException {
+        positionManagementService.printPositionsEmployees();
     }
 }
 

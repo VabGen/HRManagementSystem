@@ -6,14 +6,15 @@ public class Position {
     private static int nextId = 1;
     private final int id;
     private String name;
+    private List<Employee> employees;
 
-    public Position(int id, String name) {
+    public Position(String name) {
         this.id = nextId++;
         this.name = name;
     }
 
-    public Position(String name) {
-        this.id = nextId++;
+    public Position(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -29,16 +30,11 @@ public class Position {
         this.name = newName;
     }
 
-    public String toJsonString() {
-        return "{ \"id\": " + id + ", \"name\": \"" + name + "\" }";
-    }
-
     public List<Employee> getEmployees() {
-        return null;
+        return employees;
     }
 
-    @Override
-    public String toString() {
-        return "Должность [ID: " + id + ", Название: " + name + "]";
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 }
