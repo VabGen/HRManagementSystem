@@ -18,6 +18,8 @@ public class ShowMenuEmployee extends ShowMenu {
     @Override
     public void doDisplay() throws JsonProcessingException {
         while (running) {
+            System.out.println("Меню сотрудников!");
+            System.out.println("Выберите действие:");
             System.out.println("1. Создать сотрудника");
             System.out.println("2. Изменить данные сотрудника");
             System.out.println("3. Вывести информацию о сотруднике");
@@ -52,7 +54,7 @@ public class ShowMenuEmployee extends ShowMenu {
                     break;
                 default:
                     System.out.println("\n" + ANSI_RED + "Введите корректное число от 1 до 7 \n" + ANSI_YELLOW + "Попробуйте еще раз." + ANSI_RESET);
-                    System.out.println("***********************************************************");
+                    System.out.println("**********************************************************************************************************");
                     break;
             }
         }

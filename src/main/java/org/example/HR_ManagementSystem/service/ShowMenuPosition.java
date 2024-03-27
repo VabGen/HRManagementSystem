@@ -7,7 +7,6 @@ import java.util.Scanner;
 public class ShowMenuPosition extends ShowMenu {
     private boolean running = true;
     private final PositionManagementService positionManagementService;
-    //    Menu menu = new Menu();
     private final Scanner scanner = new Scanner(System.in);
 
     public ShowMenuPosition() {
@@ -17,8 +16,8 @@ public class ShowMenuPosition extends ShowMenu {
     @Override
     public void doDisplay() throws JsonProcessingException {
         while (running) {
-            System.out.println("Выберите действие:");
             System.out.println("Меню должностей!");
+            System.out.println("Выберите действие:");
             System.out.println("1. Создать должность");
             System.out.println("2. Изменить должность");
             System.out.println("3. Удалить должность");
@@ -53,7 +52,7 @@ public class ShowMenuPosition extends ShowMenu {
                     break;
                 default:
                     System.out.println("\n" + ANSI_RED + "Введите корректное число от 1 до 7 \n" + ANSI_YELLOW + "Попробуйте еще раз." + ANSI_RESET);
-                    System.out.println("***********************************************************");
+                    System.out.println("**********************************************************************************************************");
                     break;
             }
         }
@@ -66,24 +65,24 @@ public class ShowMenuPosition extends ShowMenu {
     }
 
     private void modifyPosition() {
-        System.out.print("Введите ID должности для изменения: ");
+        System.out.print("Введите ID должности для изменения:");
         int id = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Введите новое имя должности: ");
+        System.out.print("Введите новое имя должности:");
         String newName = scanner.nextLine();
         positionManagementService.modifyPosition(id, newName);
     }
 
     private void deletePosition() {
-        System.out.print("Введите ID должности для удаления: ");
+        System.out.print("Введите ID должности для удаления:");
         int id = scanner.nextInt();
         scanner.nextLine();
         positionManagementService.deletePosition(id);
     }
 
     private void printPosition() throws JsonProcessingException {
-        System.out.print("Введите ID должности для вывода: ");
+        System.out.print("Введите ID должности для вывода:");
         int id = scanner.nextInt();
         scanner.nextLine();
         positionManagementService.printPosition(id);

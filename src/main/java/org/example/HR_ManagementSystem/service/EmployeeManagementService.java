@@ -7,14 +7,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.HR_ManagementSystem.entity.Employee;
 import org.example.HR_ManagementSystem.entity.Position;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class EmployeeManagementService extends PositionManagementService {
@@ -118,6 +114,7 @@ public class EmployeeManagementService extends PositionManagementService {
         System.out.println("Формат даты: \"yyyy-MM-ddTHH:mm:ssZ\"");
         System.out.println("Дата с:");
         Instant fromDate = validateDate();
+
         System.out.println("Дата по:");
         Instant toDate = validateDate();
         if (fromDate == null || toDate == null) {
@@ -127,7 +124,9 @@ public class EmployeeManagementService extends PositionManagementService {
             System.out.println("Список сотрудников пуст.");
             return;
         }
+
         List<Employee> list = new ArrayList<>();
+
         for (Employee employee : employees) {
             if ((fromDate.isBefore(employee.getCreationDate()) || fromDate.equals(employee.getCreationDate())) &&
                     (toDate.isAfter(employee.getCreationDate()) || toDate.equals(employee.getCreationDate()))) {
@@ -137,28 +136,20 @@ public class EmployeeManagementService extends PositionManagementService {
         System.out.println(objectMapper.writeValueAsString(list));
     }
 
-    private Date parseDate(String dateString) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-        try {
-            return formatter.parse(dateString);
-        } catch (ParseException e) {
-            System.out.println("Ошибка при разборе даты. Проверьте правильность формата: \"dd.MM.yyyy\"");
-            return null;
-        }
-    }
-
     public void searchByPosition() throws JsonProcessingException {
-        System.out.println("Введите данные для поиска сотрудников:");
-        String positionFilter = scanner.nextLine();
+        System.out.println("Введите ID сотрудника для поиска:");
+        String positionSearch = scanner.nextLine();
         if (employees.isEmpty()) {
             System.out.println("Список сотрудников пуст.");
             return;
         }
+
         List<Employee> list = new ArrayList<>();
+
         for (Employee employee : employees) {
             if (employee.getPositionId() != null) {
                 Position position = positionManagementService.findPositionById(employee.getPositionId());
-                if (position.getName().contains(positionFilter)) {
+                if (position.getName().contains(positionSearch)) {
                     list.add(employee);
                 }
             }

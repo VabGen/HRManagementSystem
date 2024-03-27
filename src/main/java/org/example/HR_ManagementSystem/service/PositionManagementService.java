@@ -82,6 +82,7 @@ public class PositionManagementService {
         System.out.println(objectMapper.writeValueAsString(positions));
     }
 
+
     public void printPositionsEmployees() throws JsonProcessingException {
         EmployeeManagementService employeeManagementService = EmployeeManagementService.getInstance();
         if (positions.isEmpty()) {
@@ -90,6 +91,7 @@ public class PositionManagementService {
         }
 
         List<Position> positionList = new ArrayList<>();
+
         for (Position position : positions) {
             Position newPosition = new Position(position.getId(), position.getName());
             List<Employee> list = employeeManagementService.findAllByPositionId(position.getId());

@@ -17,7 +17,7 @@ public abstract class ShowMenu {
         System.out.println("\u2554" + horizontalLine + "\u2557");
         System.out.println("\u2551" + " " + ANSI_GREEN + "Добро пожаловать в систему управления сотрудниками!" + ANSI_RESET + " " + "\u2551");
         System.out.println("\u255A" + horizontalLine + "\u255D");
-        System.out.println(ANSI_BLUE + "== Выберите действие: \n" + ANSI_RESET);
+        System.out.println(ANSI_BLUE + "Выберите действие: \n" + ANSI_RESET);
     }
 
     public void noDisplay() throws JsonProcessingException {
