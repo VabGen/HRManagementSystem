@@ -1,10 +1,11 @@
-package org.example.HR_ManagementSystem.service;
+package org.example.HR_ManagementSystem.console.display;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.example.HR_ManagementSystem.console.EmployeeDataProcessing;
 
 import java.util.Scanner;
 
-public abstract class ShowMenu {
+public abstract class MenuDisplayed {
     public final String ANSI_GREEN = "\u001B[32m";
     public final String ANSI_BLUE = "\u001B[34m";
     public final String ANSI_RED = "\u001B[31m";
@@ -17,7 +18,7 @@ public abstract class ShowMenu {
         System.out.println("\u2554" + horizontalLine + "\u2557");
         System.out.println("\u2551" + " " + ANSI_GREEN + "Добро пожаловать в систему управления сотрудниками!" + ANSI_RESET + " " + "\u2551");
         System.out.println("\u255A" + horizontalLine + "\u255D");
-        System.out.println(ANSI_BLUE + "Выберите действие: \n" + ANSI_RESET);
+        System.out.println("*" + "  " + ANSI_BLUE + "\u001B[1m" + "Выберите действие: \n" + ANSI_RESET);
     }
 
     public void noDisplay() throws JsonProcessingException {
@@ -28,17 +29,18 @@ public abstract class ShowMenu {
             System.out.println("\u2554" + horizontalLine + "\u2557");
             System.out.println("\u2551" + " " + ANSI_YELLOW + "Спасибо за использование программы. До свидания!" + "    " + ANSI_RESET + "\u2551");
             System.out.println("\u255A" + horizontalLine + "\u255D");
-            Menu.running = false;
+            MenuDisplay.running = false;
+            new EmployeeMenuDisplay().running = false;
             return;
         }
         if (!"yn".contains(continueChoice) || continueChoice.length() > 1) {
             System.out.println(ANSI_RED + "Некорректный выбор. Программа будет завершена." + ANSI_RESET);
-            Menu.running = false;
+            MenuDisplay.running = false;
+            EmployeeDataProcessing.running = false;
         } else {
-            new Menu().doDisplay();
-
+            new MenuDisplay().doDisplay();
         }
     }
 
-    abstract void doDisplay() throws JsonProcessingException;
+    protected abstract void doDisplay() throws JsonProcessingException;
 }

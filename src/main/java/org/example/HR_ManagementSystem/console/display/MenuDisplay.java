@@ -1,10 +1,10 @@
-package org.example.HR_ManagementSystem.service;
+package org.example.HR_ManagementSystem.console.display;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.Scanner;
 
-public class Menu extends ShowMenu {
+public class MenuDisplay extends MenuDisplayed {
     static boolean running = true;
 
     @Override
@@ -12,11 +12,11 @@ public class Menu extends ShowMenu {
         display();
         Scanner scanner = new Scanner(System.in);
         while (running) {
-            System.out.println("1: Сотрудники");
-            System.out.println("2: Должности");
+            System.out.println("1: СОТРУДНИКИ");
+            System.out.println("2: ДОЛЖНОСТИ");
             System.out.println("3:" + " " + ANSI_RED + "\u001B[1m" + "Выход" + ANSI_RESET);
-            int input;
 
+            int input;
             try {
                 input = scanner.nextInt();
             } catch (Exception ignore) {
@@ -27,18 +27,18 @@ public class Menu extends ShowMenu {
 
             switch (input) {
                 case 1:
-                    ShowMenuEmployee showMenuEmployee = new ShowMenuEmployee();
-                    showMenuEmployee.doDisplay();
+                    EmployeeMenuDisplay employeeMenuDisplay = new EmployeeMenuDisplay();
+                    employeeMenuDisplay.doDisplay();
                     break;
                 case 2:
-                    ShowMenuPosition showMenuPosition = new ShowMenuPosition();
-                    showMenuPosition.doDisplay();
+                    new PositionMenuDisplay().doDisplay();
                     break;
                 case 3:
                     noDisplay();
                     break;
                 default:
-                    System.out.println("Неверный ввод. Попробуйте еще раз.");
+                    System.out.println("\n" + ANSI_RED + "Введите корректное число от 1 до 7 \n" + ANSI_YELLOW + "Попробуйте еще раз." + ANSI_RESET);
+                    System.out.println("**********************************************************************************************************");
             }
         }
     }

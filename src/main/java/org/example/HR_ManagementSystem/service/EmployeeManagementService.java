@@ -1,6 +1,5 @@
 package org.example.HR_ManagementSystem.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -8,172 +7,134 @@ import org.example.HR_ManagementSystem.entity.Employee;
 import org.example.HR_ManagementSystem.entity.Position;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class EmployeeManagementService extends PositionManagementService {
-    private final List<Employee> employees;
+public class EmployeeManagementService {
+    private final Map<Integer, Employee> employees;
     private static EmployeeManagementService employeeManagementServiceInstance;
     private final PositionManagementService positionManagementService;
     private final ObjectMapper objectMapper;
-    Scanner scanner = new Scanner(System.in);
+    private final boolean initData = true;
 
     private EmployeeManagementService() {
         this.positionManagementService = PositionManagementService.getInstance();
-        employees = new ArrayList<>();
+        employees = new HashMap<>();
+
+        if (initData) {
+            List<Employee> employeeList = Arrays.asList(
+                    new Employee("l", "f", "m", 1),
+                    new Employee("l", "f", "m", 2),
+                    new Employee("l", "f", "m", 3)
+            );
+            employeeList.forEach(e -> employees.put(e.getId(), e));
+        }
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
     }
 
     public static EmployeeManagementService getInstance() {
+
         if (employeeManagementServiceInstance == null) {
             employeeManagementServiceInstance = new EmployeeManagementService();
         }
         return employeeManagementServiceInstance;
     }
 
-    public void createEmployee(String lastName, String firstName, String middleName, int positionId) {
-        Employee employee = new Employee(lastName, firstName, middleName, positionId);
-        employees.add(employee);
+    public void createEmployee(Employee employee) {
+        employees.put(employee.getId(), employee);
     }
 
-    public void modifyEmployee(int id, String lastName, String firstName, String middleName, Position position) {
-        Employee employee = findEmployeeById(id);
-        if (employee != null) {
-            employee.setFirstName(firstName);
-            employee.setLastName(lastName);
-            employee.setMiddleName(middleName);
-            employee.setPosition(position);
-        }
+    public Employee modifyEmployee(Employee employee) {
+        employee.setModificationDate(Instant.now());
+        return employee;
     }
 
-    public void printEmployee(int id) throws JsonProcessingException {
-        Employee employee = findEmployeeById(id);
-        if (employee != null) {
-            Employee newEmployee = new Employee(employee);
-            Position position = positionManagementService.findPositionById(newEmployee.getPositionId());
-            newEmployee.setPosition(position);
-            System.out.println(objectMapper.writeValueAsString(newEmployee));
-        } else {
-            System.out.println("Сотрудник не найден.");
-        }
+    public Optional<Employee> printEmployee(int id) {
+        return findEmployeeById(id);
     }
 
-    public void printEmployeesSortedByLastName() throws JsonProcessingException {
-        if (employees.isEmpty()) {
-            System.out.println("Список сотрудников пуст.");
-            return;
-        }
-
-        List<Employee> sortedEmployees = new ArrayList<>(employees);
-        sortedEmployees.sort((e1, e2) -> e1.getLastName().compareToIgnoreCase(e2.getLastName()));
-        System.out.println(objectMapper.writeValueAsString(sortedEmployees));
+    public List<Employee> printEmployeesSortedByLastName() {
+        List<Employee> sortedEmployees = employees.values().stream()
+                .filter(employee -> !employee.isTerminated())
+                .sorted(Comparator.comparing(Employee::getLastName, Comparator.comparing(String::toLowerCase)))
+                .collect(Collectors.toList());
+        return sortedEmployees;
     }
 
-    public void searchByFullName() throws JsonProcessingException {
-        System.out.println("Введите данные для поиска сотрудников:");
-        String fullName = scanner.nextLine();
-        if (employees.isEmpty()) {
-            System.out.println("Список сотрудников пуст.");
-            return;
-        }
+    public Map<Integer, Employee> searchByFullName(String fullName) {
+        Map<Integer, Employee> matchingEmployees = new HashMap<>();
+        employees.forEach((id, employee) -> {
 
-        List<Employee> list = new ArrayList<>();
+            if (!employee.isTerminated()) {
+                boolean containsLastName = employee.getLastName().contains(fullName);
+                boolean containsFirstName = employee.getFirstName().contains(fullName);
+                boolean containsMiddleName = employee.getMiddleName().contains(fullName);
 
-        employees.forEach(e -> {
-            boolean containsLastName = e.getLastName().contains(fullName);
-            boolean containsFirstName = e.getFirstName().contains(fullName);
-            boolean containsMiddleName = e.getMiddleName().contains(fullName);
-
-            if (containsLastName || containsFirstName || containsMiddleName) {
-                list.add(e);
-            }
-        });
-
-        System.out.println(objectMapper.writeValueAsString(list));
-    }
-
-    private Instant validateDate() {
-        boolean b = true;
-        while (b) {
-            try {
-                b = false;
-                return Instant.parse(scanner.nextLine());
-            } catch (Exception e) {
-                System.out.println("Неверный формат даты");
-            }
-        }
-        return null;
-    }
-
-    public void searchByCreationDate() throws JsonProcessingException {
-        //2024-03-26T00:00:00Z
-        System.out.println("Формат даты: \"yyyy-MM-ddTHH:mm:ssZ\"");
-        System.out.println("Дата с:");
-        Instant fromDate = validateDate();
-
-        System.out.println("Дата по:");
-        Instant toDate = validateDate();
-        if (fromDate == null || toDate == null) {
-            return;
-        }
-        if (employees.isEmpty()) {
-            System.out.println("Список сотрудников пуст.");
-            return;
-        }
-
-        List<Employee> list = new ArrayList<>();
-
-        for (Employee employee : employees) {
-            if ((fromDate.isBefore(employee.getCreationDate()) || fromDate.equals(employee.getCreationDate())) &&
-                    (toDate.isAfter(employee.getCreationDate()) || toDate.equals(employee.getCreationDate()))) {
-                list.add(employee);
-            }
-        }
-        System.out.println(objectMapper.writeValueAsString(list));
-    }
-
-    public void searchByPosition() throws JsonProcessingException {
-        System.out.println("Введите ID сотрудника для поиска:");
-        String positionSearch = scanner.nextLine();
-        if (employees.isEmpty()) {
-            System.out.println("Список сотрудников пуст.");
-            return;
-        }
-
-        List<Employee> list = new ArrayList<>();
-
-        for (Employee employee : employees) {
-            if (employee.getPositionId() != null) {
-                Position position = positionManagementService.findPositionById(employee.getPositionId());
-                if (position.getName().contains(positionSearch)) {
-                    list.add(employee);
+                if (containsLastName || containsFirstName || containsMiddleName) {
+                    matchingEmployees.put(id, employee);
                 }
             }
-        }
-        System.out.println(objectMapper.writeValueAsString(list));
+        });
+        return matchingEmployees;
     }
 
-    public void terminateEmployee(int id) {
-        Employee employee = findEmployeeById(id);
-        if (employee != null) {
-            employee.setTerminated(true);
-        }
-    }
+    public List<Employee> searchByCreationDate(Instant fromDate, Instant toDate) {
+        List<Employee> matchingEmployees = new ArrayList<>();
 
-    private Employee findEmployeeById(int id) {
-        for (Employee employee : employees) {
-            if (employee.getId() == id) {
-                return employee;
+        for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
+            Employee employee = entry.getValue();
+            Instant creationDate = employee.getCreationDate();
+
+            if (!employee.isTerminated() && (fromDate == null || fromDate.isBefore(creationDate) || fromDate.equals(creationDate)) &&
+                    (toDate == null || toDate.isAfter(creationDate) || toDate.equals(creationDate))) {
+                matchingEmployees.add(employee);
             }
         }
-        return null;
+        return matchingEmployees;
+    }
+
+    public List<Employee> searchByPosition(Integer positionId) {
+        List<Employee> matchingEmployees = employees.values().stream()
+                .filter(employee -> !employee.isTerminated())
+                .filter(employee -> employee.getPositionId() != null)
+                .filter(employee -> positionManagementService.findPositionById(employee.getPositionId())
+                        .map(Position::getId)
+                        .filter(id -> id.equals(positionId))
+                        .isPresent())
+                .collect(Collectors.toList());
+        return matchingEmployees;
+    }
+
+    public Employee terminateEmployee(Employee employee) {
+        employee.setTerminated(true);
+        return employee;
+    }
+
+    public List<Employee> terminatedEmployees() {
+        List<Employee> terminatedEmployees = new ArrayList<>();
+        for (Employee employee : employees.values()) {
+            if (employee.isTerminated()) {
+                terminatedEmployees.add(employee);
+            }
+        }
+        return terminatedEmployees;
+    }
+
+    public Optional<Employee> findEmployeeById(int id) {
+        Employee employee = employees.get(id);
+        return Optional.ofNullable(employee);
     }
 
     public List<Employee> findAllByPositionId(Integer positionId) {
-        return employees.stream().filter(e -> e.getPositionId().equals(positionId)).collect(Collectors.toList());
+        Map<Integer, Employee> matchingEmployees = new HashMap<>();
+        for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
+
+            if (entry.getValue().getPositionId() != null && entry.getValue().getPositionId().equals(positionId)) {
+                matchingEmployees.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return matchingEmployees.values().stream().toList();
     }
 }

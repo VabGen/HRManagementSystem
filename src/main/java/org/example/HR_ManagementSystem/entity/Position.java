@@ -1,8 +1,9 @@
 package org.example.HR_ManagementSystem.entity;
 
 import java.util.List;
+import java.util.function.Supplier;
 
-public class Position {
+public class Position implements Supplier {
     private static int nextId = 1;
     private final int id;
     private String name;
@@ -36,5 +37,10 @@ public class Position {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    @Override
+    public Object get() {
+        return null;
     }
 }
