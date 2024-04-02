@@ -70,7 +70,6 @@ public class PositionManagementService {
                         .filter(employee -> !employee.isTerminated()).toList();
                 newPosition.setEmployees(filterEmployee);
             }
-
             positionList.add(newPosition);
         }
         positionList.sort(Comparator.comparing(Position::getName));

@@ -9,7 +9,7 @@ import org.example.HR_ManagementSystem.console.PositionDataProcessing;
 import java.util.Scanner;
 
 public class PositionMenuDisplay extends MenuDisplayed {
-    static private boolean running = true;
+    static public boolean running = true;
     PositionDataProcessing positionDataProcessing;
     private final Scanner scanner = new Scanner(System.in);
     private ObjectMapper objectMapper;

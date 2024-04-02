@@ -31,6 +31,7 @@ public abstract class MenuDisplayed {
             System.out.println("\u255A" + horizontalLine + "\u255D");
             MenuDisplay.running = false;
             new EmployeeMenuDisplay().running = false;
+            new PositionMenuDisplay().running = false;
             return;
         }
         if (!"yn".contains(continueChoice) || continueChoice.length() > 1) {
