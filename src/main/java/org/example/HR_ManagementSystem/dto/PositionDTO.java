@@ -1,6 +1,6 @@
 package org.example.HR_ManagementSystem.dto;
 
-import org.example.HR_ManagementSystem.entity.Position;
+import org.example.HR_ManagementSystem.collection.entity.Position;
 
 import java.util.List;
 

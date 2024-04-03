@@ -4,8 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.HR_ManagementSystem.console.PositionDataProcessing;
+import org.example.HR_ManagementSystem.collection.data.PositionDataProcessing;
+import org.example.HR_ManagementSystem.collection.entity.Position;
+import org.example.HR_ManagementSystem.console.Clear;
+import org.example.HR_ManagementSystem.console.MenuDisplay;
+import org.example.HR_ManagementSystem.console.MenuDisplayed;
+import org.example.HR_ManagementSystem.dto.PositionDTO;
+import org.example.HR_ManagementSystem.exception.ExceptionHandler;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class PositionMenuDisplay extends MenuDisplayed {
@@ -23,6 +30,7 @@ public class PositionMenuDisplay extends MenuDisplayed {
 
     @Override
     public void doDisplay() throws JsonProcessingException {
+        Clear.clearConsole();
         while (running) {
             System.out.println(ANSI_YELLOW + "Меню должностей!" + ANSI_RESET);
             System.out.println("Выберите действие:");
@@ -45,24 +53,31 @@ public class PositionMenuDisplay extends MenuDisplayed {
 
             switch (choice) {
                 case 1:
-                    positionDataProcessing.createPosition();
+                    Clear.clearConsole();
+                    createPosition();
                     break;
                 case 2:
-                    positionDataProcessing.modifyPosition();
+                    Clear.clearConsole();
+                    modifyPosition();
                     break;
                 case 3:
-                    positionDataProcessing.deletePosition();
+                    Clear.clearConsole();
+                    deletePosition();
                     break;
                 case 4:
-                    positionDataProcessing.printPosition();
+                    Clear.clearConsole();
+                    printPosition();
                     break;
                 case 5:
-                    positionDataProcessing.printAllPositions();
+                    Clear.clearConsole();
+                    printAllPositions();
                     break;
                 case 6:
-                    positionDataProcessing.printPositionsEmployees();
+                    Clear.clearConsole();
+                    printPositionsEmployees();
                     break;
                 case 7:
+                    Clear.clearConsole();
                     new MenuDisplay().doDisplay();
                     break;
                 default:
@@ -70,6 +85,74 @@ public class PositionMenuDisplay extends MenuDisplayed {
                     System.out.println("**********************************************************************************************************");
                     break;
             }
+        }
+    }
+
+    private void modifyPosition() {
+        System.out.print("Введите ID должности для изменения:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        try {
+            System.out.print("Введите новое имя должности:");
+            String newName = scanner.nextLine();
+            positionDataProcessing.modifyPosition(id, newName);
+            System.out.println("Должность успешно изменена.");
+
+        } catch (RuntimeException e) {
+            ExceptionHandler.handleException(e);
+        }
+    }
+
+    private void createPosition() throws JsonProcessingException {
+        scanner.nextLine();
+        System.out.print("Введите имя должности:");
+        String positionName = scanner.nextLine();
+        try {
+            PositionDTO positionDTO = positionDataProcessing.createPosition(positionName);
+            System.out.println("Должность успешно создана: " + objectMapper.writeValueAsString(positionDTO));
+            System.out.println("*******************************************************");
+        } catch (RuntimeException e) {
+            ExceptionHandler.handleException(e);
+        }
+    }
+
+    private void deletePosition() {
+        try {
+            System.out.print("Введите ID должности для удаления:");
+            int id = scanner.nextInt();
+            positionDataProcessing.deletePosition(id);
+            System.out.println("Должность успешно удалена.");
+        } catch (RuntimeException e) {
+            ExceptionHandler.handleException(e);
+        }
+    }
+
+    private void printPosition() throws JsonProcessingException {
+        try {
+            System.out.print("Введите ID должности для вывода:");
+            int id = scanner.nextInt();
+            PositionDTO positionDTO = positionDataProcessing.printPosition(id);
+            System.out.println(objectMapper.writeValueAsString(positionDTO));
+        } catch (RuntimeException e) {
+            ExceptionHandler.handleException(e);
+        }
+    }
+
+    private void printAllPositions() throws JsonProcessingException {
+        try {
+            List<Position> positionList = positionDataProcessing.printAllPositions();
+            System.out.println(objectMapper.writeValueAsString(positionList));
+        } catch (RuntimeException e) {
+            ExceptionHandler.handleException(e);
+        }
+    }
+
+    private void printPositionsEmployees() throws JsonProcessingException {
+        try {
+            List<PositionDTO> positionDTOS = positionDataProcessing.printPositionsEmployees();
+            System.out.println(objectMapper.writeValueAsString(positionDTOS));
+        } catch (RuntimeException e) {
+            ExceptionHandler.handleException(e);
         }
     }
 }

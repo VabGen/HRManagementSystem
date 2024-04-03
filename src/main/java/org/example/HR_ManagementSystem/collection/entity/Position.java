@@ -1,4 +1,4 @@
-package org.example.HR_ManagementSystem.entity;
+package org.example.HR_ManagementSystem.collection.entity;
 
 import java.util.List;
 import java.util.function.Supplier;

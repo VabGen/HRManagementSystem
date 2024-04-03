@@ -1,17 +1,13 @@
-package org.example.HR_ManagementSystem.service;
+package org.example.HR_ManagementSystem.collection.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.HR_ManagementSystem.entity.Employee;
-import org.example.HR_ManagementSystem.entity.Position;
+import org.example.HR_ManagementSystem.collection.entity.Employee;
+import org.example.HR_ManagementSystem.collection.entity.Position;
 
 import java.util.*;
 
 public class PositionManagementService {
     private static PositionManagementService positionManagementService;
     private final Map<Integer, Position> positions;
-    private final ObjectMapper objectMapper;
     private final boolean initData = true;
 
     PositionManagementService() {
@@ -24,9 +20,6 @@ public class PositionManagementService {
             );
             positionList.forEach(p -> positions.put(p.getId(), p));
         }
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
     }
 
     public static PositionManagementService getInstance() {

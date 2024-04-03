@@ -1,10 +1,7 @@
-package org.example.HR_ManagementSystem.service;
+package org.example.HR_ManagementSystem.collection.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.HR_ManagementSystem.entity.Employee;
-import org.example.HR_ManagementSystem.entity.Position;
+import org.example.HR_ManagementSystem.collection.entity.Employee;
+import org.example.HR_ManagementSystem.collection.entity.Position;
 
 import java.time.Instant;
 import java.util.*;
@@ -14,10 +11,9 @@ public class EmployeeManagementService {
     private final Map<Integer, Employee> employees;
     private static EmployeeManagementService employeeManagementServiceInstance;
     private final PositionManagementService positionManagementService;
-    private final ObjectMapper objectMapper;
     private final boolean initData = true;
 
-    private EmployeeManagementService() {
+    public EmployeeManagementService() {
         this.positionManagementService = PositionManagementService.getInstance();
         employees = new HashMap<>();
 
@@ -29,9 +25,6 @@ public class EmployeeManagementService {
             );
             employeeList.forEach(e -> employees.put(e.getId(), e));
         }
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
     }
 
     public static EmployeeManagementService getInstance() {
@@ -56,22 +49,20 @@ public class EmployeeManagementService {
     }
 
     public List<Employee> printEmployeesSortedByLastName() {
-        List<Employee> sortedEmployees = employees.values().stream()
+        return employees.values().stream()
                 .filter(employee -> !employee.isTerminated())
                 .sorted(Comparator.comparing(Employee::getLastName, Comparator.comparing(String::toLowerCase)))
                 .collect(Collectors.toList());
-        return sortedEmployees;
     }
 
-    public Map<Integer, Employee> searchByFullName(String fullName) {
+    public Map<Integer, Employee> searchByFullName(String fullName) throws RuntimeException {
         Map<Integer, Employee> matchingEmployees = new HashMap<>();
+
         employees.forEach((id, employee) -> {
-
             if (!employee.isTerminated()) {
-                boolean containsLastName = employee.getLastName().contains(fullName);
-                boolean containsFirstName = employee.getFirstName().contains(fullName);
-                boolean containsMiddleName = employee.getMiddleName().contains(fullName);
-
+                boolean containsLastName = employee.getLastName().toLowerCase().contains(fullName.toLowerCase());
+                boolean containsFirstName = employee.getFirstName().toLowerCase().contains(fullName.toLowerCase());
+                boolean containsMiddleName = employee.getMiddleName().toLowerCase().contains(fullName.toLowerCase());
                 if (containsLastName || containsFirstName || containsMiddleName) {
                     matchingEmployees.put(id, employee);
                 }
@@ -82,7 +73,6 @@ public class EmployeeManagementService {
 
     public List<Employee> searchByCreationDate(Instant fromDate, Instant toDate) {
         List<Employee> matchingEmployees = new ArrayList<>();
-
         for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
             Employee employee = entry.getValue();
             Instant creationDate = employee.getCreationDate();

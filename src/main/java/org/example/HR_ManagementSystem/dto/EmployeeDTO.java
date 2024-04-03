@@ -1,7 +1,7 @@
 package org.example.HR_ManagementSystem.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.example.HR_ManagementSystem.entity.Employee;
+import org.example.HR_ManagementSystem.collection.entity.Employee;
 
 import java.time.Instant;
 import java.time.ZoneId;

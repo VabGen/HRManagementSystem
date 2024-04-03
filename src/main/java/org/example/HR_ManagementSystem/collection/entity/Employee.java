@@ -1,4 +1,4 @@
-package org.example.HR_ManagementSystem.entity;
+package org.example.HR_ManagementSystem.collection.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +15,6 @@ public class Employee {
     private String lastName;
     private String firstName;
     private String middleName;
-    private Position position;
     private Integer positionId;
     private boolean isTerminated;
     public static final ObjectMapper objectMapper = new ObjectMapper();
@@ -78,14 +77,6 @@ public class Employee {
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
     }
 
     public Integer getPositionId() {
