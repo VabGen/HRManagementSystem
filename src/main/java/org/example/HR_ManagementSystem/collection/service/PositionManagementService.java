@@ -14,9 +14,9 @@ public class PositionManagementService {
         positions = new HashMap<>();
         if (initData) {
             List<Position> positionList = Arrays.asList(
-                    new Position("1"),
-                    new Position("2"),
-                    new Position("3")
+                    new Position("Software Engineer"),
+                    new Position("System Administrator"),
+                    new Position("IT Project Manager")
             );
             positionList.forEach(p -> positions.put(p.getId(), p));
         }
@@ -36,9 +36,8 @@ public class PositionManagementService {
         return newPosition;
     }
 
-    public Position modifyPosition(Position position, String newName) {
+    public void modifyPosition(Position position, String newName) {
         position.setName(newName);
-        return position;
     }
 
     public void deletePosition(int id) {

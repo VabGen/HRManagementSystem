@@ -2,8 +2,9 @@ package org.example.HR_ManagementSystem.collection.service;
 
 import org.example.HR_ManagementSystem.collection.entity.Employee;
 import org.example.HR_ManagementSystem.collection.entity.Position;
+import org.example.HR_ManagementSystem.controller.request.EmployeeFilter;
 
-import java.time.Instant;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,9 +20,9 @@ public class EmployeeManagementService {
 
         if (initData) {
             List<Employee> employeeList = Arrays.asList(
-                    new Employee("l", "f", "m", 1),
-                    new Employee("l", "f", "m", 2),
-                    new Employee("l", "f", "m", 3)
+                    new Employee("Ivanov", "Ivan", "Ivanovich", 1),
+                    new Employee("Petrov", "Petr", "Petrovich", 2),
+                    new Employee("Sidorov", "Alexey", "Igorevich", 3)
             );
             employeeList.forEach(e -> employees.put(e.getId(), e));
         }
@@ -39,13 +40,62 @@ public class EmployeeManagementService {
         employees.put(employee.getId(), employee);
     }
 
-    public Employee modifyEmployee(Employee employee) {
-        employee.setModificationDate(Instant.now());
-        return employee;
-    }
-
     public Optional<Employee> printEmployee(int id) {
         return findEmployeeById(id);
+    }
+
+
+    public List<Employee> findAll(EmployeeFilter filter) {
+        List<Employee> employeeList = new ArrayList<>();
+        for (Employee employee : employees.values()) {
+            boolean fio = filter.getFio() == null ||
+                    (employee.getLastName().toLowerCase().contains(filter.getFio().toLowerCase()) ||
+                            employee.getFirstName().toLowerCase().contains(filter.getFio().toLowerCase()) ||
+                            employee.getMiddleName().toLowerCase().contains(filter.getFio().toLowerCase()));
+
+            boolean date = filter.getStartDate() == null || filter.getEndDate() == null ||
+                    (filter.getStartDate().isBefore(employee.getCreationDate().atZone(ZoneId.of("Europe/Moscow"))) ||
+                            filter.getStartDate().equals(employee.getCreationDate().atZone(ZoneId.of("Europe/Moscow")))) &&
+                            (filter.getEndDate().isAfter(employee.getCreationDate().atZone(ZoneId.of("Europe/Moscow"))) ||
+                                    filter.getEndDate().equals(employee.getCreationDate().atZone(ZoneId.of("Europe/Moscow"))));
+
+//            boolean position = filter.getPositionName() == null ||
+//                    (employee.getPositionId() != null &&
+//                            (positionManagementService.findPositionById(employee.getPositionId())
+//                                    .map(Position::getName)
+//                                    .orElse("")
+//                                    .contains(filter.getPositionName()) ||
+//                                    positionManagementService.isPositionExists(filter.getPositionName())));
+
+            boolean position = true;
+            if (filter.getPositionName() != null) {
+                if (employee.getPositionId() == null) {
+                    position = false;
+                } else {
+                    Optional<Position> positionById = positionManagementService.findPositionById(employee.getPositionId());
+                    if (positionById.isPresent()) {
+                        if (!positionById.get().getName().contains(filter.getPositionName())) {
+                            position = false;
+                        }
+                    }
+                }
+                if (!positionManagementService.isPositionExists(filter.getPositionName())) {
+                    position = false;
+                }
+            }
+            boolean terminate = filter.getTerminates() == null ||
+                    employee.isTerminated() == filter.getTerminates();
+
+            if (fio && date && position && terminate) {
+                employeeList.add(employee);
+            }
+        }
+        if (filter.getSort() != null) {
+            return employeeList.stream()
+                    .sorted(Comparator.comparing(Employee::getLastName))
+                    .collect(Collectors.toList());
+        }
+        return employeeList;
     }
 
     public List<Employee> printEmployeesSortedByLastName() {
@@ -55,35 +105,21 @@ public class EmployeeManagementService {
                 .collect(Collectors.toList());
     }
 
-    public Map<Integer, Employee> searchByFullName(String fullName) throws RuntimeException {
-        Map<Integer, Employee> matchingEmployees = new HashMap<>();
-
-        employees.forEach((id, employee) -> {
-            if (!employee.isTerminated()) {
-                boolean containsLastName = employee.getLastName().toLowerCase().contains(fullName.toLowerCase());
-                boolean containsFirstName = employee.getFirstName().toLowerCase().contains(fullName.toLowerCase());
-                boolean containsMiddleName = employee.getMiddleName().toLowerCase().contains(fullName.toLowerCase());
-                if (containsLastName || containsFirstName || containsMiddleName) {
-                    matchingEmployees.put(id, employee);
-                }
-            }
-        });
-        return matchingEmployees;
-    }
-
-    public List<Employee> searchByCreationDate(Instant fromDate, Instant toDate) {
-        List<Employee> matchingEmployees = new ArrayList<>();
-        for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
-            Employee employee = entry.getValue();
-            Instant creationDate = employee.getCreationDate();
-
-            if (!employee.isTerminated() && (fromDate == null || fromDate.isBefore(creationDate) || fromDate.equals(creationDate)) &&
-                    (toDate == null || toDate.isAfter(creationDate) || toDate.equals(creationDate))) {
-                matchingEmployees.add(employee);
-            }
-        }
-        return matchingEmployees;
-    }
+//    public Map<Integer, Employee> searchByFullName(String fullName) throws RuntimeException {
+//        Map<Integer, Employee> matchingEmployees = new HashMap<>();
+//
+//        employees.forEach((id, employee) -> {
+//            if (!employee.isTerminated()) {
+//                boolean containsLastName = employee.getLastName().toLowerCase().contains(fullName.toLowerCase());
+//                boolean containsFirstName = employee.getFirstName().toLowerCase().contains(fullName.toLowerCase());
+//                boolean containsMiddleName = employee.getMiddleName().toLowerCase().contains(fullName.toLowerCase());
+//                if (containsLastName || containsFirstName || containsMiddleName) {
+//                    matchingEmployees.put(id, employee);
+//                }
+//            }
+//        });
+//        return matchingEmployees;
+//    }
 
     public List<Employee> searchByPosition(Integer positionId) {
         List<Employee> matchingEmployees = employees.values().stream()

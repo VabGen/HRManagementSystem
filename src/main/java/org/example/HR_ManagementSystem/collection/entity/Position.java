@@ -3,7 +3,7 @@ package org.example.HR_ManagementSystem.collection.entity;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class Position implements Supplier {
+public class Position {
     private static int nextId = 1;
     private final int id;
     private String name;
@@ -37,10 +37,5 @@ public class Position implements Supplier {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
-    }
-
-    @Override
-    public Object get() {
-        return null;
     }
 }

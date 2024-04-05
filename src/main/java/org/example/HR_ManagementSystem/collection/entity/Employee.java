@@ -3,6 +3,7 @@ package org.example.HR_ManagementSystem.collection.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.example.HR_ManagementSystem.controller.request.EmployeeRequest;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -32,6 +33,15 @@ public class Employee {
         this.positionId = positionId;
         this.creationDate = Instant.now();
         this.modificationDate = Instant.now();
+        this.isTerminated = false;
+    }
+
+    public Employee(EmployeeRequest request) {
+        this.id = nextId++;
+        this.lastName = request.getLastName();
+        this.firstName = request.getFirstName();
+        this.middleName = request.getMiddleName();
+        this.positionId = request.getPositionId();
         this.isTerminated = false;
     }
 
@@ -95,10 +105,3 @@ public class Employee {
         isTerminated = terminated;
     }
 }
-
-
-
-
-
-
-

@@ -14,6 +14,8 @@ public class MenuDisplay extends MenuDisplayed {
         display();
         Scanner scanner = new Scanner(System.in);
         while (running) {
+            EmployeeMenuDisplay.running = true;
+            PositionMenuDisplay.running = true;
             System.out.println("1: СОТРУДНИКИ");
             System.out.println("2: ДОЛЖНОСТИ");
             System.out.println("3:" + " " + ANSI_RED + "\u001B[1m" + "\u001B[4m" + "Выход" + ANSI_RESET);
@@ -22,7 +24,7 @@ public class MenuDisplay extends MenuDisplayed {
             try {
                 input = scanner.nextInt();
             } catch (Exception ignore) {
-                System.out.println("Неверное значение");
+                System.out.println(ANSI_RED + "\u001B[1m" + "Неверное значение" + ANSI_RESET);
                 scanner.nextLine();
                 continue;
             }

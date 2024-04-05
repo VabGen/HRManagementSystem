@@ -17,11 +17,14 @@ public class EmployeeDTO {
     private String firstName;
     private String middleName;
     private PositionDTO position;
-    private Integer positionId;
+    private int positionId;
     private boolean isTerminated;
 
+    public EmployeeDTO() {
+    }
+
     public EmployeeDTO(int id, Instant creationDate, Instant modificationDate, String lastName, String firstName,
-                       String middleName, PositionDTO position, Integer positionId, boolean isTerminated) {
+                       String middleName, PositionDTO position, int positionId, boolean isTerminated) {
         this.id = id;
         this.creationDate = creationDate.atZone(ZoneId.of("Europe/Moscow"));
         this.modificationDate = modificationDate.atZone(ZoneId.of("Europe/Moscow"));
@@ -100,11 +103,11 @@ public class EmployeeDTO {
         this.position = position;
     }
 
-    public Integer getPositionId() {
+    public int getPositionId() {
         return positionId;
     }
 
-    public void setPositionId(Integer positionId) {
+    public void setPositionId(int positionId) {
         this.positionId = positionId;
     }
 

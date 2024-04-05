@@ -33,7 +33,7 @@ public class PositionMenuDisplay extends MenuDisplayed {
         Clear.clearConsole();
         while (running) {
             System.out.println(ANSI_YELLOW + "Меню должностей!" + ANSI_RESET);
-            System.out.println("Выберите действие:");
+            System.out.println("*" + "  " + ANSI_BLUE + "\u001B[4m" + "\u001B[1m" + "Выберите действие:" + ANSI_RESET);
             System.out.println("1. Создать должность");
             System.out.println("2. Изменить должность");
             System.out.println("3. Удалить должность");
@@ -89,10 +89,10 @@ public class PositionMenuDisplay extends MenuDisplayed {
     }
 
     private void modifyPosition() {
-        System.out.print("Введите ID должности для изменения:");
-        int id = scanner.nextInt();
-        scanner.nextLine();
         try {
+            System.out.print("Введите ID должности для изменения:");
+            int id = scanner.nextInt();
+            scanner.nextLine();
             System.out.print("Введите новое имя должности:");
             String newName = scanner.nextLine();
             positionDataProcessing.modifyPosition(id, newName);
@@ -100,6 +100,7 @@ public class PositionMenuDisplay extends MenuDisplayed {
 
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
+            running = false;
         }
     }
 

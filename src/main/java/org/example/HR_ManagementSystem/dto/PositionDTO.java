@@ -12,8 +12,6 @@ public class PositionDTO {
     public PositionDTO(Position position) {
         this.id = position.getId();
         this.name = position.getName();
-//        List<Employee> employees1 = position.getEmployees();
-//        employees1.forEach(e -> employees.add(new EmployeeDTO(e)));
     }
 
     public PositionDTO(int id, String name, List<EmployeeDTO> employees) {

@@ -7,6 +7,7 @@ import org.example.HR_ManagementSystem.collection.service.EmployeeManagementServ
 import org.example.HR_ManagementSystem.collection.service.PositionManagementService;
 import org.example.HR_ManagementSystem.dto.EmployeeDTO;
 import org.example.HR_ManagementSystem.dto.PositionDTO;
+import org.example.HR_ManagementSystem.exception.BadRequestException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class PositionDataProcessing {
     public PositionDTO createPosition(String positionName) {
 
         if (positionManagementService.isPositionExists(positionName)) {
-            throw new RuntimeException();
+            throw new BadRequestException("Position name cannot be empty");
         } else {
             Position position = positionManagementService.createPosition(positionName);
             PositionDTO positionDTO = new PositionDTO(position);
@@ -34,7 +35,7 @@ public class PositionDataProcessing {
         Optional<Position> optionalPosition = positionManagementService.findPositionById(id);
 
         if (optionalPosition.isEmpty()) {
-            throw new RuntimeException();
+            throw new BadRequestException("Position not found");
         } else {
             positionManagementService.modifyPosition(optionalPosition.get(), newName);
         }
@@ -44,7 +45,7 @@ public class PositionDataProcessing {
         Optional<Position> positionById = positionManagementService.findPositionById(id);
 
         if (positionById.isEmpty()) {
-            throw new RuntimeException();
+            throw new BadRequestException("Position not found");
         } else {
             positionManagementService.deletePosition(positionById.get().getId());
         }
@@ -54,7 +55,7 @@ public class PositionDataProcessing {
         Optional<Position> position = positionManagementService.findPositionById(id);
 
         if (position.isEmpty()) {
-            throw new RuntimeException();
+            throw new BadRequestException("Position not found");
         } else {
             PositionDTO positionDTO = new PositionDTO(position.get());
             EmployeeManagementService employeeManagementService = EmployeeManagementService.getInstance();
@@ -64,11 +65,11 @@ public class PositionDataProcessing {
         }
     }
 
-    public List<Position> printAllPositions() throws JsonProcessingException {
+    public List<Position> printAllPositions() {
         List<Position> positionList = positionManagementService.printAllPositions();
 
         if (positionList.isEmpty()) {
-            throw new RuntimeException();
+            throw new BadRequestException("Position not found");
         }
         return positionList;
     }
@@ -77,7 +78,7 @@ public class PositionDataProcessing {
         List<Position> positionList = positionManagementService.printPositionsEmployees();
 
         if (positionList == null || positionList.isEmpty()) {
-            throw new RuntimeException();
+            throw new BadRequestException("Position not found");
         } else {
             List<PositionDTO> dtos = positionListToDto(positionList);
             return dtos;

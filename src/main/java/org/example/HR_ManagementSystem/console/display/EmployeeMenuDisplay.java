@@ -10,6 +10,7 @@ import org.example.HR_ManagementSystem.collection.service.PositionManagementServ
 import org.example.HR_ManagementSystem.console.Clear;
 import org.example.HR_ManagementSystem.console.MenuDisplay;
 import org.example.HR_ManagementSystem.console.MenuDisplayed;
+import org.example.HR_ManagementSystem.controller.request.EmployeeRequest;
 import org.example.HR_ManagementSystem.dto.EmployeeDTO;
 import org.example.HR_ManagementSystem.exception.ExceptionHandler;
 
@@ -35,8 +36,8 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
     public void doDisplay() throws JsonProcessingException {
         Clear.clearConsole();
         while (running) {
-            System.out.println(ANSI_YELLOW + "Меню сотрудников!" + ANSI_RESET);
-            System.out.println("Выберите действие:");
+            System.out.println("   " + ANSI_YELLOW + "Меню сотрудников!" + ANSI_RESET);
+            System.out.println("*" + "  " + ANSI_BLUE + "\u001B[4m" + "\u001B[1m" + "Выберите действие:" + ANSI_RESET);
             System.out.println("1. Создать сотрудника");
             System.out.println("2. Изменить данные сотрудника");
             System.out.println("3. Вывести информацию о сотруднике");
@@ -51,7 +52,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
                 choice = scanner.nextInt();
                 scanner.nextLine();
             } catch (Exception ignore) {
-                System.out.println("Неверное значение");
+                System.out.println(ANSI_RED + "\u001B[4m" + "Неверное значение" + ANSI_RESET);
                 scanner.nextLine();
                 continue;
             }
@@ -75,7 +76,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
                     break;
                 case 5:
                     Clear.clearConsole();
-                    new EmployeesByFilterDisplay().printEmployeesByFilter();
+                    new EmployeesByFilterDisplay().searchAll();
                     break;
                 case 6:
                     Clear.clearConsole();
@@ -98,24 +99,28 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
     }
 
     private void createEmployees() throws JsonProcessingException {
-        System.out.println("Введите фамилию сотрудника:");
-        String lastName = scanner.nextLine();
-
-        System.out.println("Введите имя сотрудника:");
-        String firstName = scanner.nextLine();
-
-        System.out.println("Введите отчество сотрудника:");
-        String middleName = scanner.nextLine();
-
-        PositionManagementService.getInstance().printAllPositions();
-        System.out.println("Выберите ID должности сотрудника:");
-        int positionId = scanner.nextInt();
         try {
-            EmployeeDTO employeeDTO = employeeDataProcessing.createEmployee(lastName, firstName, middleName, positionId);
+            System.out.println("Введите фамилию сотрудника:");
+            String lastName = scanner.nextLine();
+
+            System.out.println("Введите имя сотрудника:");
+            String firstName = scanner.nextLine();
+
+            System.out.println("Введите отчество сотрудника:");
+            String middleName = scanner.nextLine();
+
+            PositionManagementService.getInstance().printAllPositions();
+            System.out.println("Выберите ID должности сотрудника:");
+            int positionId = scanner.nextInt();
+
+            EmployeeRequest request = new EmployeeRequest(lastName, firstName, middleName, positionId);
+
+            EmployeeDTO employeeDTO = employeeDataProcessing.createEmployee(request);
             System.out.println("Сотрудник успешно создан: " + objectMapper.writeValueAsString(employeeDTO));
             System.out.println("******************************************************");
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
+            running = false;
         }
     }
 
@@ -124,24 +129,27 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
         int id = scanner.nextInt();
         scanner.nextLine();
         try {
-            EmployeeDTO employee = employeeDataProcessing.modifyEmployee(id);
+            EmployeeRequest request = new EmployeeRequest();
+            request.setId(id);
             System.out.println("Введите новую фамилию сотрудника:");
-            employee.setLastName(scanner.nextLine());
+            request.setLastName(scanner.nextLine());
 
             System.out.println("Введите новое имя сотрудника:");
-            employee.setFirstName(scanner.nextLine());
+            request.setFirstName(scanner.nextLine());
 
             System.out.println("Введите новое отчество сотрудника:");
-            employee.setMiddleName(scanner.nextLine());
+            request.setMiddleName(scanner.nextLine());
 
             System.out.println("Введите ID должности для сотрудника:");
-            employee.setPositionId(scanner.nextInt());
+            request.setPositionId(scanner.nextInt());
 
+            EmployeeDTO employee = employeeDataProcessing.modifyEmployee(request);
             System.out.println("Данные сотрудника успешно изменены.");
             System.out.println(objectMapper.writeValueAsString(employee));
             System.out.println("***********************************************************");
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
+            running = false;
         }
     }
 
