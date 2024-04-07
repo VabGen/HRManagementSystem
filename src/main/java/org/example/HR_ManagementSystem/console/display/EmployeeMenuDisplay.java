@@ -115,7 +115,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
 
             EmployeeRequest request = new EmployeeRequest(lastName, firstName, middleName, positionId);
 
-            EmployeeDTO employeeDTO = employeeDataProcessing.createEmployee(request);
+            EmployeeDTO employeeDTO = employeeDataProcessing.create(request);
             System.out.println("Сотрудник успешно создан: " + objectMapper.writeValueAsString(employeeDTO));
             System.out.println("******************************************************");
         } catch (RuntimeException e) {
@@ -143,7 +143,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
             System.out.println("Введите ID должности для сотрудника:");
             request.setPositionId(scanner.nextInt());
 
-            EmployeeDTO employee = employeeDataProcessing.modifyEmployee(request);
+            EmployeeDTO employee = employeeDataProcessing.modify(request);
             System.out.println("Данные сотрудника успешно изменены.");
             System.out.println(objectMapper.writeValueAsString(employee));
             System.out.println("***********************************************************");
@@ -158,7 +158,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
         int id = scanner.nextInt();
         scanner.nextLine();
         try {
-            EmployeeDTO printEmployee = employeeDataProcessing.printEmployee(id);
+            EmployeeDTO printEmployee = employeeDataProcessing.print(id);
             System.out.println(objectMapper.writeValueAsString(printEmployee));
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -167,7 +167,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
 
     private void printEmployeesSortedByLastName() throws JsonProcessingException {
         try {
-            List<EmployeeDTO> employeeList = employeeDataProcessing.printEmployeesSortedByLastName();
+            List<EmployeeDTO> employeeList = employeeDataProcessing.sortedByLastName();
             System.out.println(objectMapper.writeValueAsString(employeeList));
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -178,7 +178,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
         System.out.println("Введите ID сотрудника, которого нужно уволить:");
         int id = scanner.nextInt();
         try {
-            EmployeeDTO terminateEmployee = employeeDataProcessing.terminateEmployee(id);
+            EmployeeDTO terminateEmployee = employeeDataProcessing.terminate(id);
             System.out.println(objectMapper.writeValueAsString(terminateEmployee) + "Сотрудник успешно уволен.");
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -187,7 +187,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
 
     private void terminatedEmployees() throws JsonProcessingException {
         try {
-            List<EmployeeDTO> dtos = employeeDataProcessing.terminatedEmployees();
+            List<EmployeeDTO> dtos = employeeDataProcessing.terminated();
             System.out.println(objectMapper.writeValueAsString(dtos));
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);

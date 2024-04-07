@@ -9,22 +9,21 @@ import org.example.HR_ManagementSystem.controller.request.EmployeeRequest;
 import org.example.HR_ManagementSystem.dto.EmployeeDTO;
 import org.example.HR_ManagementSystem.dto.PositionDTO;
 import org.example.HR_ManagementSystem.exception.BadRequestException;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
+@Component
 public class EmployeeDataProcessing {
     public static boolean running = true;
     private final EmployeeManagementService employeeManagementService;
-    private final PositionManagementService positionManagementService;
 
     public EmployeeDataProcessing() {
         this.employeeManagementService = EmployeeManagementService.getInstance();
-        this.positionManagementService = PositionManagementService.getInstance();
     }
 
-    public EmployeeDTO createEmployee(EmployeeRequest request) {
+    public EmployeeDTO create(EmployeeRequest request) {
         Employee employee = new Employee(request);
         employee.setCreationDate(Instant.now());
         employee.setModificationDate(Instant.now());
@@ -39,7 +38,7 @@ public class EmployeeDataProcessing {
         return employeeDTO;
     }
 
-    public EmployeeDTO modifyEmployee(EmployeeRequest request) {
+    public EmployeeDTO modify(EmployeeRequest request) {
         Optional<Employee> optionalEmployee = employeeManagementService.printEmployee(request.getId());
 
         if (optionalEmployee.isEmpty()) {
@@ -54,7 +53,7 @@ public class EmployeeDataProcessing {
         return new EmployeeDTO(employee);
     }
 
-    public EmployeeDTO printEmployee(int id) {
+    public EmployeeDTO print(int id) {
         Optional<Employee> employee = employeeManagementService.printEmployee(id);
 
         if (employee.isEmpty()) {
@@ -74,7 +73,7 @@ public class EmployeeDataProcessing {
         return dtoList;
     }
 
-    public List<EmployeeDTO> printEmployeesSortedByLastName() {
+    public List<EmployeeDTO> sortedByLastName() {
         List<Employee> employeeList = employeeManagementService.printEmployeesSortedByLastName();
 
         if (employeeList.isEmpty()) {
@@ -84,19 +83,7 @@ public class EmployeeDataProcessing {
         return dtos;
     }
 
-//    public List<EmployeeDTO> searchByFullName(String fullName) {
-//        Map<Integer, Employee> employeeMapOptional = employeeManagementService.searchByFullName(fullName);
-//        List<Employee> employeeList = new ArrayList<>(employeeMapOptional.values());
-//
-//        if (employeeList.isEmpty()) {
-//            throw new BadRequestException("Employee not found");
-//        } else {
-//            List<EmployeeDTO> dtos = new PositionDataProcessing().employeeListToDto(employeeList);
-//            return dtos;
-//        }
-//    }
-
-    public EmployeeDTO terminateEmployee(int id) {
+    public EmployeeDTO terminate(int id) {
         Optional<Employee> employee = employeeManagementService.printEmployee(id);
 
         if (employee.isEmpty()) {
@@ -107,7 +94,7 @@ public class EmployeeDataProcessing {
         }
     }
 
-    public List<EmployeeDTO> terminatedEmployees() {
+    public List<EmployeeDTO> terminated() {
         List<Employee> employees = employeeManagementService.terminatedEmployees();
 
         if (employees.isEmpty()) {
@@ -116,32 +103,6 @@ public class EmployeeDataProcessing {
             List<EmployeeDTO> dtos = new PositionDataProcessing().employeeListToDto(employees);
             return dtos;
         }
-    }
-
-    public List<EmployeeDTO> searchByPosition(int positionId) {
-        List<Employee> matchingEmployees = employeeManagementService.searchByPosition(positionId);
-        List<EmployeeDTO> employeesWithPositions;
-
-        if (matchingEmployees.isEmpty()) {
-            throw new BadRequestException("Employee not found");
-        } else {
-            List<String> positionNames = matchingEmployees.stream()
-                    .map(employee -> positionManagementService.findPositionById(employee.getPositionId()))
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .map(Position::getName)
-                    .toList();
-
-            employeesWithPositions = new PositionDataProcessing().employeeListToDto(matchingEmployees);
-            employeesWithPositions.stream()
-                    .peek(employeeDTO -> {
-                        Position position = positionManagementService.findPositionById(employeeDTO.getPositionId())
-                                .orElseThrow(() -> new RuntimeException("Position not found"));
-                        employeeDTO.setPosition(new PositionDTO(position));
-                    })
-                    .collect(Collectors.toList());
-        }
-        return employeesWithPositions;
     }
 }
 

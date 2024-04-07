@@ -2,6 +2,7 @@ package org.example.HR_ManagementSystem.collection.service;
 
 import org.example.HR_ManagementSystem.collection.entity.Employee;
 import org.example.HR_ManagementSystem.collection.entity.Position;
+import org.example.HR_ManagementSystem.dto.PositionDTO;
 
 import java.util.*;
 
@@ -30,14 +31,15 @@ public class PositionManagementService {
         return positionManagementService;
     }
 
-    public Position createPosition(String name) {
+    public PositionDTO createPosition(String name) {
         Position newPosition = new Position(name);
         positions.put(newPosition.getId(), newPosition);
-        return newPosition;
+        return new PositionDTO(newPosition);
     }
 
-    public void modifyPosition(Position position, String newName) {
+    public PositionDTO modifyPosition(Position position, String newName) {
         position.setName(newName);
+        return new PositionDTO(position);
     }
 
     public void deletePosition(int id) {
@@ -45,7 +47,8 @@ public class PositionManagementService {
     }
 
     public List<Position> printAllPositions() {
-        return new ArrayList<>(positions.values());
+        ArrayList<Position> positionsList = new ArrayList<>(positions.values());
+        return positionsList;
     }
 
     public List<Position> printPositionsEmployees() {
@@ -57,6 +60,7 @@ public class PositionManagementService {
         for (Position position : positions.values()) {
             Position newPosition = new Position(position.getId(), position.getName());
             List<Employee> employeeList = employeeManagementService.findAllByPositionId(position.getId());
+
             if (!employeeList.isEmpty()) {
                 List<Employee> filterEmployee = employeeList.stream()
                         .filter(employee -> !employee.isTerminated()).toList();

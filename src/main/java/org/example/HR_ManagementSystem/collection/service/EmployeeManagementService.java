@@ -59,14 +59,6 @@ public class EmployeeManagementService {
                             (filter.getEndDate().isAfter(employee.getCreationDate().atZone(ZoneId.of("Europe/Moscow"))) ||
                                     filter.getEndDate().equals(employee.getCreationDate().atZone(ZoneId.of("Europe/Moscow"))));
 
-//            boolean position = filter.getPositionName() == null ||
-//                    (employee.getPositionId() != null &&
-//                            (positionManagementService.findPositionById(employee.getPositionId())
-//                                    .map(Position::getName)
-//                                    .orElse("")
-//                                    .contains(filter.getPositionName()) ||
-//                                    positionManagementService.isPositionExists(filter.getPositionName())));
-
             boolean position = true;
             if (filter.getPositionName() != null) {
                 if (employee.getPositionId() == null) {
@@ -103,34 +95,6 @@ public class EmployeeManagementService {
                 .filter(employee -> !employee.isTerminated())
                 .sorted(Comparator.comparing(Employee::getLastName, Comparator.comparing(String::toLowerCase)))
                 .collect(Collectors.toList());
-    }
-
-//    public Map<Integer, Employee> searchByFullName(String fullName) throws RuntimeException {
-//        Map<Integer, Employee> matchingEmployees = new HashMap<>();
-//
-//        employees.forEach((id, employee) -> {
-//            if (!employee.isTerminated()) {
-//                boolean containsLastName = employee.getLastName().toLowerCase().contains(fullName.toLowerCase());
-//                boolean containsFirstName = employee.getFirstName().toLowerCase().contains(fullName.toLowerCase());
-//                boolean containsMiddleName = employee.getMiddleName().toLowerCase().contains(fullName.toLowerCase());
-//                if (containsLastName || containsFirstName || containsMiddleName) {
-//                    matchingEmployees.put(id, employee);
-//                }
-//            }
-//        });
-//        return matchingEmployees;
-//    }
-
-    public List<Employee> searchByPosition(Integer positionId) {
-        List<Employee> matchingEmployees = employees.values().stream()
-                .filter(employee -> !employee.isTerminated())
-                .filter(employee -> employee.getPositionId() != null)
-                .filter(employee -> positionManagementService.findPositionById(employee.getPositionId())
-                        .map(Position::getId)
-                        .filter(id -> id.equals(positionId))
-                        .isPresent())
-                .collect(Collectors.toList());
-        return matchingEmployees;
     }
 
     public Employee terminateEmployee(Employee employee) {

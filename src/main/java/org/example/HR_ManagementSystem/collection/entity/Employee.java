@@ -18,12 +18,6 @@ public class Employee {
     private String middleName;
     private Integer positionId;
     private boolean isTerminated;
-    public static final ObjectMapper objectMapper = new ObjectMapper();
-
-    static {
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        objectMapper.registerModule(new JavaTimeModule());
-    }
 
     public Employee(String lastName, String firstName, String middleName, int positionId) {
         this.id = nextId++;
