@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "creationDate": "04.04.2024 15.33.04",
+    "modificationDate": "04.04.2024 15.33.04",
+    "lastName": "Ivanov",
+    "firstName": "Ivan",
+    "middleName": "Ivanovich",
+    "position": null,
+    "positionId": 1,
+    "terminated": false
+  },
+  {
+    "id": 2,
+    "creationDate": "04.04.2024 15.33.04",
+    "modificationDate": "04.04.2024 15.33.04",
+    "lastName": "Petrov",
+    "firstName": "Petr",
+    "middleName": "Petrovich",
+    "position": null,
+    "positionId": 2,
+    "terminated": false
+  },
+  {
+    "id": 3,
+    "creationDate": "04.04.2024 15.33.04",
+    "modificationDate": "04.04.2024 15.33.04",
+    "lastName": "Sidorov",
+    "firstName": "Alexey",
+    "middleName": "Igorevich",
+    "position": null,
+    "positionId": 3,
+    "terminated": false
+  }
+]

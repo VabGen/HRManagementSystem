@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "creationDate": "04.04.2024 14.55.50",
+    "modificationDate": "04.04.2024 14.55.50",
+    "lastName": "l",
+    "firstName": "f",
+    "middleName": "m",
+    "position": null,
+    "positionId": 1,
+    "terminated": false
+  },
+  {
+    "id": 2,
+    "creationDate": "04.04.2024 14.55.50",
+    "modificationDate": "04.04.2024 14.55.50",
+    "lastName": "l",
+    "firstName": "f",
+    "middleName": "m",
+    "position": null,
+    "positionId": 2,
+    "terminated": false
+  },
+  {
+    "id": 3,
+    "creationDate": "04.04.2024 14.55.50",
+    "modificationDate": "04.04.2024 14.55.50",
+    "lastName": "l",
+    "firstName": "f",
+    "middleName": "m",
+    "position": null,
+    "positionId": 3,
+    "terminated": false
+  }
+]

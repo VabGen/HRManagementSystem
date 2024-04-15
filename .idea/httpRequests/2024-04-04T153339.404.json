@@ -1,0 +1,6 @@
+{
+  "timestamp": "2024-04-04T12:33:39.275+00:00",
+  "status": 404,
+  "error": "Not Found",
+  "path": "/api/employees/search/1"
+}
