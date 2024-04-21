@@ -1,4 +1,4 @@
-package org.example.HR_ManagementSystem.dto;
+package org.example.HR_ManagementSystem.model.dto;
 
 import org.example.HR_ManagementSystem.collection.entity.Position;
 

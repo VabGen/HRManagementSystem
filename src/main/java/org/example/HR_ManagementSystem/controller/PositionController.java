@@ -2,8 +2,8 @@ package org.example.HR_ManagementSystem.controller;
 
 import org.example.HR_ManagementSystem.collection.data.PositionDataProcessing;
 import org.example.HR_ManagementSystem.collection.entity.Position;
-import org.example.HR_ManagementSystem.controller.request.PositionRequest;
-import org.example.HR_ManagementSystem.dto.PositionDTO;
+import org.example.HR_ManagementSystem.model.request.PositionRequest;
+import org.example.HR_ManagementSystem.model.dto.PositionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

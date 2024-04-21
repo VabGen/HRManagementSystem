@@ -1,4 +1,4 @@
-package org.example.HR_ManagementSystem.controller.request;
+package org.example.HR_ManagementSystem.model.request;
 
 public class PositionRequest {
     private Integer id;

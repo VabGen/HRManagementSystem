@@ -10,8 +10,8 @@ import org.example.HR_ManagementSystem.collection.service.PositionManagementServ
 import org.example.HR_ManagementSystem.console.Clear;
 import org.example.HR_ManagementSystem.console.MenuDisplay;
 import org.example.HR_ManagementSystem.console.MenuDisplayed;
-import org.example.HR_ManagementSystem.controller.request.EmployeeRequest;
-import org.example.HR_ManagementSystem.dto.EmployeeDTO;
+import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
+import org.example.HR_ManagementSystem.model.dto.EmployeeDTO;
 import org.example.HR_ManagementSystem.exception.ExceptionHandler;
 
 import java.util.List;

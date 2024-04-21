@@ -1,4 +1,4 @@
-package org.example.HR_ManagementSystem.controller.request;
+package org.example.HR_ManagementSystem.model.filter;
 
 import java.time.ZonedDateTime;
 

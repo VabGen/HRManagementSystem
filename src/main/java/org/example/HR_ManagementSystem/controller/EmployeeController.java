@@ -1,9 +1,10 @@
 package org.example.HR_ManagementSystem.controller;
 
 import org.example.HR_ManagementSystem.collection.data.EmployeeDataProcessing;
-import org.example.HR_ManagementSystem.controller.request.EmployeeFilter;
-import org.example.HR_ManagementSystem.controller.request.EmployeeRequest;
-import org.example.HR_ManagementSystem.dto.EmployeeDTO;
+import org.example.HR_ManagementSystem.model.filter.EmployeeFilter;
+import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
+import org.example.HR_ManagementSystem.model.dto.EmployeeDTO;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.HR_ManagementSystem.collection.data.EmployeeDataProcessing;
-import org.example.HR_ManagementSystem.controller.request.EmployeeFilter;
-import org.example.HR_ManagementSystem.dto.EmployeeDTO;
+import org.example.HR_ManagementSystem.model.filter.EmployeeFilter;
+import org.example.HR_ManagementSystem.model.dto.EmployeeDTO;
 import org.example.HR_ManagementSystem.exception.ExceptionHandler;
 
 import java.time.Instant;

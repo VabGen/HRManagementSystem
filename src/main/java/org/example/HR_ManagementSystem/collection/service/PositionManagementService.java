@@ -2,7 +2,7 @@ package org.example.HR_ManagementSystem.collection.service;
 
 import org.example.HR_ManagementSystem.collection.entity.Employee;
 import org.example.HR_ManagementSystem.collection.entity.Position;
-import org.example.HR_ManagementSystem.dto.PositionDTO;
+import org.example.HR_ManagementSystem.model.dto.PositionDTO;
 
 import java.util.*;
 

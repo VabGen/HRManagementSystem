@@ -2,7 +2,7 @@ package org.example.HR_ManagementSystem.collection.service;
 
 import org.example.HR_ManagementSystem.collection.entity.Employee;
 import org.example.HR_ManagementSystem.collection.entity.Position;
-import org.example.HR_ManagementSystem.controller.request.EmployeeFilter;
+import org.example.HR_ManagementSystem.model.filter.EmployeeFilter;
 
 import java.time.ZoneId;
 import java.util.*;

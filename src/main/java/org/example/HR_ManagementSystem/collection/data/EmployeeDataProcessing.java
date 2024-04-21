@@ -4,10 +4,10 @@ import org.example.HR_ManagementSystem.collection.entity.Employee;
 import org.example.HR_ManagementSystem.collection.entity.Position;
 import org.example.HR_ManagementSystem.collection.service.EmployeeManagementService;
 import org.example.HR_ManagementSystem.collection.service.PositionManagementService;
-import org.example.HR_ManagementSystem.controller.request.EmployeeFilter;
-import org.example.HR_ManagementSystem.controller.request.EmployeeRequest;
-import org.example.HR_ManagementSystem.dto.EmployeeDTO;
-import org.example.HR_ManagementSystem.dto.PositionDTO;
+import org.example.HR_ManagementSystem.model.filter.EmployeeFilter;
+import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
+import org.example.HR_ManagementSystem.model.dto.EmployeeDTO;
+import org.example.HR_ManagementSystem.model.dto.PositionDTO;
 import org.example.HR_ManagementSystem.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 
