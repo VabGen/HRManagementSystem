@@ -4,26 +4,33 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.HR_ManagementSystem.collection.data.PositionDataProcessing;
-import org.example.HR_ManagementSystem.collection.entity.Position;
 import org.example.HR_ManagementSystem.console.Clear;
 import org.example.HR_ManagementSystem.console.MenuDisplay;
 import org.example.HR_ManagementSystem.console.MenuDisplayed;
-import org.example.HR_ManagementSystem.model.request.PositionRequest;
-import org.example.HR_ManagementSystem.model.dto.PositionDTO;
 import org.example.HR_ManagementSystem.exception.ExceptionHandler;
+import org.example.HR_ManagementSystem.model.request.PositionRequest;
+import org.example.HR_ManagementSystem.service.PositionService;
+import org.example.HR_ManagementSystem.source.data.PositionServiceDao;
+import org.example.HR_ManagementSystem.source.model.Position;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Scanner;
 
+@Component
 public class PositionMenuDisplay extends MenuDisplayed {
-    static public boolean running = true;
-    PositionDataProcessing positionDataProcessing;
-    private final Scanner scanner = new Scanner(System.in);
-    private ObjectMapper objectMapper;
 
-    public PositionMenuDisplay() {
-        this.positionDataProcessing = new PositionDataProcessing();
+    static public boolean running = true;
+    PositionService positionService;
+    PositionServiceDao positionServiceDao;
+    private final Scanner scanner = new Scanner(System.in);
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public PositionMenuDisplay(PositionService positionService) {
+        this.positionService = positionService;
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
@@ -93,14 +100,14 @@ public class PositionMenuDisplay extends MenuDisplayed {
         try {
             PositionRequest request = new PositionRequest();
             System.out.print("Введите ID должности для изменения:");
-            int id = scanner.nextInt();
+            Long id = scanner.nextLong();
             request.setId(id);
             scanner.nextLine();
 
             System.out.print("Введите новое имя должности:");
             request.setName(scanner.nextLine());
 
-            positionDataProcessing.modify(request);
+            positionService.update(id, request);
             System.out.println("Должность успешно изменена.");
 
         } catch (RuntimeException e) {
@@ -114,8 +121,10 @@ public class PositionMenuDisplay extends MenuDisplayed {
         System.out.print("Введите имя должности:");
         String positionName = scanner.nextLine();
         try {
-            PositionDTO positionDTO = positionDataProcessing.create(positionName);
-            System.out.println("Должность успешно создана: " + objectMapper.writeValueAsString(positionDTO));
+            PositionRequest positionRequest = new PositionRequest();
+            positionRequest.setName(positionName);
+            Position position = positionService.create(positionRequest);
+            System.out.println("Должность успешно создана: " + objectMapper.writeValueAsString(position));
             System.out.println("*******************************************************");
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -125,8 +134,8 @@ public class PositionMenuDisplay extends MenuDisplayed {
     private void deletePosition() {
         try {
             System.out.print("Введите ID должности для удаления:");
-            int id = scanner.nextInt();
-            positionDataProcessing.delete(id);
+            Long id = scanner.nextLong();
+            positionService.delete(id);
             System.out.println("Должность успешно удалена.");
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -136,9 +145,9 @@ public class PositionMenuDisplay extends MenuDisplayed {
     private void printPosition() throws JsonProcessingException {
         try {
             System.out.print("Введите ID должности для вывода:");
-            int id = scanner.nextInt();
-            PositionDTO positionDTO = positionDataProcessing.find(id);
-            System.out.println(objectMapper.writeValueAsString(positionDTO));
+            Long id = scanner.nextLong();
+            Position position = positionService.getPositionById(id);
+            System.out.println(objectMapper.writeValueAsString(position));
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
         }
@@ -146,7 +155,7 @@ public class PositionMenuDisplay extends MenuDisplayed {
 
     private void printAllPositions() throws JsonProcessingException {
         try {
-            List<Position> positionList = positionDataProcessing.printAll();
+            List<Position> positionList = positionService.getAllPositions();
             System.out.println(objectMapper.writeValueAsString(positionList));
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -154,11 +163,12 @@ public class PositionMenuDisplay extends MenuDisplayed {
     }
 
     private void printPositionsEmployees() throws JsonProcessingException {
-        try {
-            List<PositionDTO> positionDTOS = positionDataProcessing.printPositionsEmployees();
-            System.out.println(objectMapper.writeValueAsString(positionDTOS));
-        } catch (RuntimeException e) {
-            ExceptionHandler.handleException(e);
-        }
+//        try {
+//            List<PositionDTO> positionDTOS = positionService.printPositionsEmployees();
+//            System.out.println(objectMapper.writeValueAsString(positionDTOS));
+//        } catch (RuntimeException e) {
+//            ExceptionHandler.handleException(e);
+//        }
+        System.out.println("I printPositionsEmployees");
     }
 }

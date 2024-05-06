@@ -1,42 +1,57 @@
-package org.example.HR_ManagementSystem.collection.entity;
+package org.example.HR_ManagementSystem.source.model;
 
+import jakarta.persistence.*;
 import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-public class Employee {
-    private static int nextId = 1;
-    private final int id;
+@Entity
+public class Employee implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    private Position position;
+
     private Instant creationDate;
     private Instant modificationDate;
     private String lastName;
     private String firstName;
     private String middleName;
-    private Integer positionId;
     private boolean isTerminated;
 
-    public Employee(String lastName, String firstName, String middleName, int positionId) {
-        this.id = nextId++;
+    public Employee(String lastName, String firstName, String middleName, Position position) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;
-        this.positionId = positionId;
+        this.position = position;
         this.creationDate = Instant.now();
         this.modificationDate = Instant.now();
         this.isTerminated = false;
     }
 
-    public Employee(EmployeeRequest request) {
-        this.id = nextId++;
-        this.lastName = request.getLastName();
-        this.firstName = request.getFirstName();
-        this.middleName = request.getMiddleName();
-        this.positionId = request.getPositionId();
-        this.isTerminated = false;
+//    public Employee(EmployeeRequest request) {
+//        this.lastName = request.getLastName();
+//        this.firstName = request.getFirstName();
+//        this.middleName = request.getMiddleName();
+//        this.position = request.getPosition();
+//        this.isTerminated = false;
+//    }
+
+    public Employee() {
+
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -80,12 +95,12 @@ public class Employee {
         this.middleName = middleName;
     }
 
-    public Integer getPositionId() {
-        return positionId;
+    public Integer getPosition() {
+        return position.getId();
     }
 
-    public void setPositionId(Integer positionId) {
-        this.positionId = positionId;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public boolean isTerminated() {

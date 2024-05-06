@@ -5,6 +5,7 @@ import org.example.HR_ManagementSystem.console.Clear;
 import java.util.InputMismatchException;
 
 public class ExceptionHandler {
+
     public static void handleException(Exception e) {
         Clear.clearConsole();
         if (e instanceof InputMismatchException) {

@@ -3,11 +3,20 @@ package org.example.HR_ManagementSystem.console;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.HR_ManagementSystem.console.display.EmployeeMenuDisplay;
 import org.example.HR_ManagementSystem.console.display.PositionMenuDisplay;
+import org.example.HR_ManagementSystem.service.EmployeeService;
+import org.example.HR_ManagementSystem.service.PositionService;
+import org.example.HR_ManagementSystem.source.data.EmployeeServiceDao;
+import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
+@Component
 public class MenuDisplay extends MenuDisplayed {
+
     static boolean running = true;
+    PositionService positionService;
+    EmployeeServiceDao employeeServiceDao;
+    EmployeeService employeeService;
 
     @Override
     public void doDisplay() throws JsonProcessingException {
@@ -31,12 +40,12 @@ public class MenuDisplay extends MenuDisplayed {
             switch (input) {
                 case 1:
                     Clear.clearConsole();
-                    EmployeeMenuDisplay employeeMenuDisplay = new EmployeeMenuDisplay();
+                    EmployeeMenuDisplay employeeMenuDisplay = new EmployeeMenuDisplay(employeeServiceDao, employeeService);
                     employeeMenuDisplay.doDisplay();
                     break;
                 case 2:
                     Clear.clearConsole();
-                    new PositionMenuDisplay().doDisplay();
+                    new PositionMenuDisplay(positionService).doDisplay();
                     break;
                 case 3:
                     Clear.clearConsole();

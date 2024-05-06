@@ -4,29 +4,37 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.HR_ManagementSystem.collection.data.EmployeeDataProcessing;
-import org.example.HR_ManagementSystem.collection.service.EmployeeManagementService;
-import org.example.HR_ManagementSystem.collection.service.PositionManagementService;
 import org.example.HR_ManagementSystem.console.Clear;
 import org.example.HR_ManagementSystem.console.MenuDisplay;
 import org.example.HR_ManagementSystem.console.MenuDisplayed;
-import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
-import org.example.HR_ManagementSystem.model.dto.EmployeeDTO;
 import org.example.HR_ManagementSystem.exception.ExceptionHandler;
+import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
+import org.example.HR_ManagementSystem.service.EmployeeService;
+import org.example.HR_ManagementSystem.source.data.EmployeeServiceDao;
+import org.example.HR_ManagementSystem.source.data.PositionServiceDao;
+import org.example.HR_ManagementSystem.source.data.impl.EmployeeServiceDaoImpl;
+import org.example.HR_ManagementSystem.source.model.Employee;
+import org.hibernate.SessionFactory;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Scanner;
 
+@Component
 public class EmployeeMenuDisplay extends MenuDisplayed {
+
     public static boolean running = true;
     Scanner scanner = new Scanner(System.in);
     ObjectMapper objectMapper;
-    EmployeeDataProcessing employeeDataProcessing;
-    EmployeeManagementService employeeManagementService;
+    EmployeeServiceDao employeeServiceDao;
+    EmployeeService employeeService;
+    PositionServiceDao positionServiceDao;
 
-    public EmployeeMenuDisplay() {
-        this.employeeDataProcessing = new EmployeeDataProcessing();
-        this.employeeManagementService = new EmployeeManagementService();
+    @Autowired
+    public EmployeeMenuDisplay(EmployeeServiceDao employeeServiceDao, EmployeeService employeeService) {
+        this.employeeService = employeeService;
+        this.employeeServiceDao = employeeServiceDao;
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
@@ -76,7 +84,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
                     break;
                 case 5:
                     Clear.clearConsole();
-                    new EmployeesByFilterDisplay().searchAll();
+                    new EmployeesByFilterDisplay(employeeServiceDao, employeeService).searchAll();
                     break;
                 case 6:
                     Clear.clearConsole();
@@ -109,13 +117,13 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
             System.out.println("Введите отчество сотрудника:");
             String middleName = scanner.nextLine();
 
-            PositionManagementService.getInstance().printAllPositions();
+            positionServiceDao.findAll();
             System.out.println("Выберите ID должности сотрудника:");
-            int positionId = scanner.nextInt();
+            Long positionId = scanner.nextLong();
 
             EmployeeRequest request = new EmployeeRequest(lastName, firstName, middleName, positionId);
 
-            EmployeeDTO employeeDTO = employeeDataProcessing.create(request);
+            Employee employeeDTO = employeeService.create(request);
             System.out.println("Сотрудник успешно создан: " + objectMapper.writeValueAsString(employeeDTO));
             System.out.println("******************************************************");
         } catch (RuntimeException e) {
@@ -126,7 +134,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
 
     private void modifyEmployee() throws JsonProcessingException {
         System.out.println("Введите ID сотрудника, данные которого нужно изменить:");
-        int id = scanner.nextInt();
+        Long id = scanner.nextLong();
         scanner.nextLine();
         try {
             EmployeeRequest request = new EmployeeRequest();
@@ -141,9 +149,9 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
             request.setMiddleName(scanner.nextLine());
 
             System.out.println("Введите ID должности для сотрудника:");
-            request.setPositionId(scanner.nextInt());
+            request.setPositionId(scanner.nextLong());
 
-            EmployeeDTO employee = employeeDataProcessing.modify(request);
+            Employee employee = employeeService.update(id, request);
             System.out.println("Данные сотрудника успешно изменены.");
             System.out.println(objectMapper.writeValueAsString(employee));
             System.out.println("***********************************************************");
@@ -155,10 +163,10 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
 
     private void printEmployee() throws JsonProcessingException {
         System.out.println("Введите ID сотрудника, информацию о котором нужно вывести:");
-        int id = scanner.nextInt();
+        Long id = scanner.nextLong();
         scanner.nextLine();
         try {
-            EmployeeDTO printEmployee = employeeDataProcessing.print(id);
+            EmployeeRequest printEmployee = employeeService.getEmployeeById(id);
             System.out.println(objectMapper.writeValueAsString(printEmployee));
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -166,19 +174,20 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
     }
 
     private void printEmployeesSortedByLastName() throws JsonProcessingException {
-        try {
-            List<EmployeeDTO> employeeList = employeeDataProcessing.sortedByLastName();
-            System.out.println(objectMapper.writeValueAsString(employeeList));
-        } catch (RuntimeException e) {
-            ExceptionHandler.handleException(e);
-        }
+//        try {
+//            List<EmployeeDTO> employeeList = employeeServiceDaoImpl.sortedByLastName();
+//            System.out.println(objectMapper.writeValueAsString(employeeList));
+//        } catch (RuntimeException e) {
+//            ExceptionHandler.handleException(e);
+//        }
+        System.out.println("I sortedByLastName");
     }
 
     private void terminateEmployee() throws JsonProcessingException {
         System.out.println("Введите ID сотрудника, которого нужно уволить:");
-        int id = scanner.nextInt();
+        Long id = scanner.nextLong();
         try {
-            EmployeeDTO terminateEmployee = employeeDataProcessing.terminate(id);
+            EmployeeRequest terminateEmployee = employeeService.terminate(id);
             System.out.println(objectMapper.writeValueAsString(terminateEmployee) + "Сотрудник успешно уволен.");
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -187,8 +196,8 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
 
     private void terminatedEmployees() throws JsonProcessingException {
         try {
-            List<EmployeeDTO> dtos = employeeDataProcessing.terminated();
-            System.out.println(objectMapper.writeValueAsString(dtos));
+            EmployeeRequest employee = employeeService.terminated();
+            System.out.println(objectMapper.writeValueAsString(employee));
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
         }

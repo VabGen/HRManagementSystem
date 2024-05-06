@@ -1,14 +1,18 @@
 package org.example.HR_ManagementSystem.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.example.HR_ManagementSystem.collection.entity.Employee;
+import org.example.HR_ManagementSystem.source.model.Employee;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-public class EmployeeDTO {
-    private int id;
+public class EmployeeDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private Long id;
     @JsonFormat(pattern = "dd.MM.yyyy HH.mm.ss")
     private ZonedDateTime creationDate;
     @JsonFormat(pattern = "dd.MM.yyyy HH.mm.ss")
@@ -23,7 +27,7 @@ public class EmployeeDTO {
     public EmployeeDTO() {
     }
 
-    public EmployeeDTO(int id, Instant creationDate, Instant modificationDate, String lastName, String firstName,
+    public EmployeeDTO(Long id, Instant creationDate, Instant modificationDate, String lastName, String firstName,
                        String middleName, PositionDTO position, int positionId, boolean isTerminated) {
         this.id = id;
         this.creationDate = creationDate.atZone(ZoneId.of("Europe/Moscow"));
@@ -43,15 +47,15 @@ public class EmployeeDTO {
         this.lastName = employee.getLastName();
         this.firstName = employee.getFirstName();
         this.middleName = employee.getMiddleName();
-        this.positionId = employee.getPositionId();
+//        this.positionId = employee.getPositionId();
         this.isTerminated = employee.isTerminated();
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public int setId() {
+    public Long setId() {
         return id;
     }
 

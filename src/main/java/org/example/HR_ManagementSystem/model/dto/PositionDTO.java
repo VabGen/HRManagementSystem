@@ -1,10 +1,11 @@
 package org.example.HR_ManagementSystem.model.dto;
 
-import org.example.HR_ManagementSystem.collection.entity.Position;
+import org.example.HR_ManagementSystem.source.model.Position;
 
 import java.util.List;
 
 public class PositionDTO {
+
     private int id;
     private String name;
     private List<EmployeeDTO> employees;

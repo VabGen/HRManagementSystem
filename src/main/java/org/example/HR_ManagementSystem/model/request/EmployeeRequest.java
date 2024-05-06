@@ -1,27 +1,28 @@
 package org.example.HR_ManagementSystem.model.request;
 
 public class EmployeeRequest {
-    private Integer id;
+
+    private Long id;
     private String lastName;
     private String firstName;
     private String middleName;
-    private Integer positionId;
+    private Long positionId;
 
     public EmployeeRequest() {
     }
 
-    public EmployeeRequest(String lastName, String firstName, String middleName, int positionId) {
+    public EmployeeRequest(String lastName, String firstName, String middleName, Long positionId) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;
         this.positionId = positionId;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -49,11 +50,11 @@ public class EmployeeRequest {
         this.middleName = middleName;
     }
 
-    public Integer getPositionId() {
+    public Long getPositionId() {
         return positionId;
     }
 
-    public void setPositionId(Integer positionId) {
+    public void setPositionId(Long positionId) {
         this.positionId = positionId;
     }
 }

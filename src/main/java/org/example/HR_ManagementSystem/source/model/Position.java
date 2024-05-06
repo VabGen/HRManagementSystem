@@ -1,22 +1,32 @@
-package org.example.HR_ManagementSystem.collection.entity;
+package org.example.HR_ManagementSystem.source.model;
+
+import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.function.Supplier;
 
+@Entity
 public class Position {
-    private static int nextId = 1;
-    private final int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private String name;
+
+    @OneToMany(mappedBy = "position")
     private List<Employee> employees;
 
     public Position(String name) {
-        this.id = nextId++;
         this.name = name;
     }
 
     public Position(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Position() {
+
     }
 
     public int getId() {
