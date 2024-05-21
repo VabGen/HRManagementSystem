@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>List of Employees</title>
+    <title>Employees</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script defer type="text/javascript" th:src="@{/js/script.js}"></script>
+    <script defer type="text/javascript" src="/js/scriptPosition.js"></script>
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">List of Employees</h2>
+<header class="container mt-5 text-center">
+    <h2 class="mb-4">Employees</h2>
+</header>
+<main class="container">
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Name</th>
+                <th scope="col">First name</th>
+                <th scope="col">Middle name</th>
+                <th scope="col">Last name</th>
                 <th scope="col">Position</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -22,27 +26,27 @@
             <tbody>
             <tr th:each="employee : ${employees}">
                 <td th:text="${employee.id}">1</td>
-                <td th:text="${employee.name}">Ivan Ivanovich Ivanov</td>
-                <td th:text="${employee.position.positionName}">Software Engineer</td>
+                <td th:text="${employee.firstName}">Ivan</td>
+                <td th:text="${employee.middleName}">Ivanovich</td>
+                <td th:text="${employee.lastName}">Ivanov</td>
+                <td th:text="${employee.position.name}">Software Engineer</td>
                 <td>
-                    <button th:attr="data-id=${employee.id}" onclick="editEmployee(this)"
-                            class="btn btn-primary btn-sm">Edit
+                    <button class="btn btn-primary btn-sm" onclick="editEmployee(this)"
+                            th:attr="data-id=${employee.id}">Edit
                     </button>
-                    <button th:attr="data-id=${employee.id}" onclick="deleteEmployee(this)"
-                            class="btn btn-danger btn-sm">Delete
+                    <button class="btn btn-danger btn-sm" onclick="deleteEmployee(this)"
+                            th:attr="data-id=${employee.id}">Delete
                     </button>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <button onclick="addEmployee()" class="btn btn-success">Add Employee</button>
-</div>
+    <a href="employeeForm.html" onclick="addEmployee()" class="btn btn-success">Add Employee</a>
+</main>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-

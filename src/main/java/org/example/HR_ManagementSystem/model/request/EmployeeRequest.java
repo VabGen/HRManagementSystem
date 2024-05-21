@@ -3,18 +3,18 @@ package org.example.HR_ManagementSystem.model.request;
 public class EmployeeRequest {
 
     private Long id;
-    private String lastName;
     private String firstName;
     private String middleName;
+    private String lastName;
     private Long positionId;
 
     public EmployeeRequest() {
     }
 
-    public EmployeeRequest(String lastName, String firstName, String middleName, Long positionId) {
-        this.lastName = lastName;
+    public EmployeeRequest(String firstName, String middleName, String lastName, Long positionId) {
         this.firstName = firstName;
         this.middleName = middleName;
+        this.lastName = lastName;
         this.positionId = positionId;
     }
 

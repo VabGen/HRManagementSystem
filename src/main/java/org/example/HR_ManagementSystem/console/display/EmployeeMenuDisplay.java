@@ -7,18 +7,18 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.HR_ManagementSystem.console.Clear;
 import org.example.HR_ManagementSystem.console.MenuDisplay;
 import org.example.HR_ManagementSystem.console.MenuDisplayed;
+import org.example.HR_ManagementSystem.dao.service.EmployeeServiceDao;
+import org.example.HR_ManagementSystem.dao.service.PositionServiceDao;
+import org.example.HR_ManagementSystem.dto.EmployeeDto;
 import org.example.HR_ManagementSystem.exception.ExceptionHandler;
+import org.example.HR_ManagementSystem.model.filter.EmployeeFilter;
 import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
 import org.example.HR_ManagementSystem.service.EmployeeService;
-import org.example.HR_ManagementSystem.source.data.EmployeeServiceDao;
-import org.example.HR_ManagementSystem.source.data.PositionServiceDao;
-import org.example.HR_ManagementSystem.source.data.impl.EmployeeServiceDaoImpl;
-import org.example.HR_ManagementSystem.source.model.Employee;
-import org.hibernate.SessionFactory;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -30,11 +30,18 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
     EmployeeServiceDao employeeServiceDao;
     EmployeeService employeeService;
     PositionServiceDao positionServiceDao;
+    EmployeesByFilterDisplay employeesByFilterDisplay;
+    MenuDisplay menuDisplay;
 
     @Autowired
-    public EmployeeMenuDisplay(EmployeeServiceDao employeeServiceDao, EmployeeService employeeService) {
+    public EmployeeMenuDisplay(EmployeeServiceDao employeeServiceDao, @Lazy MenuDisplay menuDisplay,
+                               EmployeeService employeeService, PositionServiceDao positionServiceDao,
+                               EmployeesByFilterDisplay employeesByFilterDisplay) {
         this.employeeService = employeeService;
         this.employeeServiceDao = employeeServiceDao;
+        this.positionServiceDao = positionServiceDao;
+        this.employeesByFilterDisplay = employeesByFilterDisplay;
+        this.menuDisplay = menuDisplay;
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
@@ -47,13 +54,14 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
             System.out.println("   " + ANSI_YELLOW + "Меню сотрудников!" + ANSI_RESET);
             System.out.println("*" + "  " + ANSI_BLUE + "\u001B[4m" + "\u001B[1m" + "Выберите действие:" + ANSI_RESET);
             System.out.println("1. Создать сотрудника");
-            System.out.println("2. Изменить данные сотрудника");
-            System.out.println("3. Вывести информацию о сотруднике");
-            System.out.println("4. Вывести список сотрудников, отсортированный по фамилии");
-            System.out.println("5. Вывести список сотрудников по фильтру");
-            System.out.println("6. Уволить сотрудника");
-            System.out.println("7. Уволенные сотрудники");
-            System.out.println("8. Назад к основному меню");
+            System.out.println("2. Удалить сотрудника");
+            System.out.println("3. Изменить данные сотрудника");
+            System.out.println("4. Вывести информацию о сотруднике");
+            System.out.println("5. Вывести список сотрудников, отсортированный по фамилии");
+            System.out.println("6. Вывести список сотрудников по фильтру");
+            System.out.println("7. Уволить сотрудника");
+            System.out.println("8. Уволенные сотрудники");
+            System.out.println("9. Назад к основному меню");
 
             int choice;
             try {
@@ -68,35 +76,39 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
             switch (choice) {
                 case 1:
                     Clear.clearConsole();
-                    createEmployees();
+                    create();
                     break;
                 case 2:
                     Clear.clearConsole();
-                    modifyEmployee();
+                    delete();
                     break;
                 case 3:
                     Clear.clearConsole();
-                    printEmployee();
+                    update();
                     break;
                 case 4:
                     Clear.clearConsole();
-                    printEmployeesSortedByLastName();
+                    findById();
                     break;
                 case 5:
                     Clear.clearConsole();
-                    new EmployeesByFilterDisplay(employeeServiceDao, employeeService).searchAll();
+                    sort();
                     break;
                 case 6:
                     Clear.clearConsole();
-                    terminateEmployee();
+                    employeesByFilterDisplay.searchAll();
                     break;
                 case 7:
                     Clear.clearConsole();
-                    terminatedEmployees();
+                    updateTerminateStatus();
                     break;
                 case 8:
                     Clear.clearConsole();
-                    new MenuDisplay().doDisplay();
+                    terminatedEmployees();
+                    break;
+                case 9:
+                    Clear.clearConsole();
+                    menuDisplay.doDisplay();
                     break;
                 default:
                     System.out.println("\n" + ANSI_RED + "Введите корректное число от 1 до 7 \n" + ANSI_YELLOW + "Попробуйте еще раз." + ANSI_RESET);
@@ -106,7 +118,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
         }
     }
 
-    private void createEmployees() throws JsonProcessingException {
+    private void create() throws JsonProcessingException {
         try {
             System.out.println("Введите фамилию сотрудника:");
             String lastName = scanner.nextLine();
@@ -117,13 +129,14 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
             System.out.println("Введите отчество сотрудника:");
             String middleName = scanner.nextLine();
 
-            positionServiceDao.findAll();
+            positionServiceDao.read();
+
             System.out.println("Выберите ID должности сотрудника:");
             Long positionId = scanner.nextLong();
 
             EmployeeRequest request = new EmployeeRequest(lastName, firstName, middleName, positionId);
 
-            Employee employeeDTO = employeeService.create(request);
+            EmployeeDto employeeDTO = employeeService.create(request);
             System.out.println("Сотрудник успешно создан: " + objectMapper.writeValueAsString(employeeDTO));
             System.out.println("******************************************************");
         } catch (RuntimeException e) {
@@ -132,7 +145,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
         }
     }
 
-    private void modifyEmployee() throws JsonProcessingException {
+    private void update() throws JsonProcessingException {
         System.out.println("Введите ID сотрудника, данные которого нужно изменить:");
         Long id = scanner.nextLong();
         scanner.nextLine();
@@ -151,7 +164,7 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
             System.out.println("Введите ID должности для сотрудника:");
             request.setPositionId(scanner.nextLong());
 
-            Employee employee = employeeService.update(id, request);
+            EmployeeDto employee = employeeService.update(request);
             System.out.println("Данные сотрудника успешно изменены.");
             System.out.println(objectMapper.writeValueAsString(employee));
             System.out.println("***********************************************************");
@@ -161,33 +174,35 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
         }
     }
 
-    private void printEmployee() throws JsonProcessingException {
+    private void findById() throws JsonProcessingException {
         System.out.println("Введите ID сотрудника, информацию о котором нужно вывести:");
         Long id = scanner.nextLong();
-        scanner.nextLine();
         try {
-            EmployeeRequest printEmployee = employeeService.getEmployeeById(id);
+            EmployeeDto printEmployee = employeeService.findById(id);
             System.out.println(objectMapper.writeValueAsString(printEmployee));
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
         }
     }
 
-    private void printEmployeesSortedByLastName() throws JsonProcessingException {
-//        try {
-//            List<EmployeeDTO> employeeList = employeeServiceDaoImpl.sortedByLastName();
-//            System.out.println(objectMapper.writeValueAsString(employeeList));
-//        } catch (RuntimeException e) {
-//            ExceptionHandler.handleException(e);
-//        }
-        System.out.println("I sortedByLastName");
+    private void sort() throws JsonProcessingException {
+        EmployeeFilter filter = new EmployeeFilter();
+        filter.getSort();
+        try {
+            List<EmployeeDto> employeeList = employeeService.filter(filter, 0, 30);
+            for (EmployeeDto employee : employeeList) {
+                System.out.println(objectMapper.writeValueAsString(employee));
+            }
+        } catch (RuntimeException e) {
+            ExceptionHandler.handleException(e);
+        }
     }
 
-    private void terminateEmployee() throws JsonProcessingException {
+    private void updateTerminateStatus() throws JsonProcessingException {
         System.out.println("Введите ID сотрудника, которого нужно уволить:");
         Long id = scanner.nextLong();
         try {
-            EmployeeRequest terminateEmployee = employeeService.terminate(id);
+            EmployeeDto terminateEmployee = employeeService.terminate(id);
             System.out.println(objectMapper.writeValueAsString(terminateEmployee) + "Сотрудник успешно уволен.");
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
@@ -195,9 +210,22 @@ public class EmployeeMenuDisplay extends MenuDisplayed {
     }
 
     private void terminatedEmployees() throws JsonProcessingException {
+        EmployeeFilter employeeFilter = new EmployeeFilter();
+        employeeFilter.setTerminates(true);
         try {
-            EmployeeRequest employee = employeeService.terminated();
-            System.out.println(objectMapper.writeValueAsString(employee));
+            List<EmployeeDto> employeeList = employeeService.filter(employeeFilter, 0, 30);
+            System.out.println(objectMapper.writeValueAsString(employeeList));
+        } catch (RuntimeException e) {
+            ExceptionHandler.handleException(e);
+        }
+    }
+
+    private void delete() {
+        try {
+            System.out.print("Введите ID сотрудника для удаления:");
+            Long id = scanner.nextLong();
+            employeeService.delete(id);
+            System.out.println("Сотрудник успешно удален.");
         } catch (RuntimeException e) {
             ExceptionHandler.handleException(e);
         }

@@ -3,9 +3,9 @@ package org.example.HR_ManagementSystem.console;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.HR_ManagementSystem.console.display.EmployeeMenuDisplay;
 import org.example.HR_ManagementSystem.console.display.PositionMenuDisplay;
-import org.example.HR_ManagementSystem.service.EmployeeService;
+import org.example.HR_ManagementSystem.dao.service.EmployeeServiceDao;
 import org.example.HR_ManagementSystem.service.PositionService;
-import org.example.HR_ManagementSystem.source.data.EmployeeServiceDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -15,8 +15,18 @@ public class MenuDisplay extends MenuDisplayed {
 
     static boolean running = true;
     PositionService positionService;
+    PositionMenuDisplay positionMenuDisplay;
     EmployeeServiceDao employeeServiceDao;
-    EmployeeService employeeService;
+    EmployeeMenuDisplay employeeMenuDisplay;
+
+    @Autowired
+    public MenuDisplay(PositionService positionService, PositionMenuDisplay positionMenuDisplay,
+                       EmployeeServiceDao employeeServiceDao, EmployeeMenuDisplay employeeMenuDisplay) {
+        this.positionService = positionService;
+        this.positionMenuDisplay = positionMenuDisplay;
+        this.employeeServiceDao = employeeServiceDao;
+        this.employeeMenuDisplay = employeeMenuDisplay;
+    }
 
     @Override
     public void doDisplay() throws JsonProcessingException {
@@ -40,12 +50,11 @@ public class MenuDisplay extends MenuDisplayed {
             switch (input) {
                 case 1:
                     Clear.clearConsole();
-                    EmployeeMenuDisplay employeeMenuDisplay = new EmployeeMenuDisplay(employeeServiceDao, employeeService);
                     employeeMenuDisplay.doDisplay();
                     break;
                 case 2:
                     Clear.clearConsole();
-                    new PositionMenuDisplay(positionService).doDisplay();
+                    positionMenuDisplay.doDisplay();
                     break;
                 case 3:
                     Clear.clearConsole();

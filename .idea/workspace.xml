@@ -5,50 +5,95 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c6adaab-6734-4119-a42a-2ca45dabab27" name="Changes" comment="refactor: change structure of the project">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HR_Management_System.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/configuration/HibernateConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/configuration/WebConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controllers/controllerRest/EmployeeController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controllers/controllerView/EmployeeViewController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/mapper/EmployeeMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/repository/EmployeeRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/repository/PositionRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/service/DemoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/service/EmployeeService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/data/EmployeeServiceDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/data/PositionServiceDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/data/impl/EmployeeServiceDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/data/impl/PositionServiceDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/css/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/js/script.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/employees.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controllers/EmployeeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controllers/PositionController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/repository/PositionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/service/EmployeeServiceDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/service/PositionServiceDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/service/impl/EmployeeServiceDaoImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/service/impl/PositionServiceDaoImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/specifications/EmployeeSpecifications.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/specifications/PositionSpecifications.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dto/PositionDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dto/mapper/EmployeeMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dto/mapper/PositionMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1f8f37c9-b2c5-4c86-8f13-ae192f0163cb.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1f8f37c9-b2c5-4c86-8f13-ae192f0163cb/storage_v2/_src_/database/postgres.edMnLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1f8f37c9-b2c5-4c86-8f13-ae192f0163cb/storage_v2/_src_/database/postgres.edMnLQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1f8f37c9-b2c5-4c86-8f13-ae192f0163cb/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1f8f37c9-b2c5-4c86-8f13-ae192f0163cb/storage_v2/_src_/database/postgres.edMnLQ/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HR_Management_System.iml" beforeDir="false" afterPath="$PROJECT_DIR$/HR_Management_System.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/collection/data/EmployeeDataProcessing.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/collection/data/PositionDataProcessing.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/collection/entity/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/model/Employee.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/collection/entity/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/model/Position.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/collection/service/EmployeeManagementService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/collection/service/PositionManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/service/PositionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/configuration/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/configuration/AppConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/Clear.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/Clear.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/configuration/HibernateConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/configuration/WebConfig.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/MenuDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/MenuDisplay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/MenuDisplayed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/MenuDisplayed.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/display/EmployeeMenuDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/display/EmployeeMenuDisplay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/display/EmployeesByFilterDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/display/EmployeesByFilterDisplay.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/display/PositionMenuDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/console/display/PositionMenuDisplay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controller/EmployeeController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controller/PositionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controllers/controllerRest/PositionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/exception/BadRequestException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/exception/BadRequestException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/exception/ExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/exception/ExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/dto/EmployeeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/dto/EmployeeDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/dto/PositionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/dto/PositionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controllers/controllerRest/EmployeeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controllers/controllerRest/PositionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/controllers/controllerView/EmployeeViewController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/mapper/EmployeeMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/dto/EmployeeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dto/EmployeeDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/dto/PositionDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/filter/EmployeeFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/filter/EmployeeFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/request/EmployeeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/request/EmployeeRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/request/PositionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/model/request/PositionRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/repository/EmployeeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/repository/EmployeeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/repository/PositionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/service/DemoService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/service/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/service/EmployeeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/service/PositionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/service/PositionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/data/EmployeeServiceDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/data/PositionServiceDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/data/impl/EmployeeServiceDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/data/impl/PositionServiceDaoImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/model/Employee.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/entity/Employee.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/source/model/Position.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/HR_ManagementSystem/dao/entity/Position.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/script.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/employees.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/configuration/AppConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/configuration/AppConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/configuration/HibernateConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/configuration/WebConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/MenuDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/MenuDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/MenuDisplayed.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/MenuDisplayed.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/display/EmployeeMenuDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/display/EmployeeMenuDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/display/EmployeesByFilterDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/display/EmployeesByFilterDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/display/PositionMenuDisplay.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/console/display/PositionMenuDisplay.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/controllers/controllerRest/EmployeeController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/controllers/controllerRest/PositionController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/controllers/controllerView/EmployeeViewController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/mapper/EmployeeMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/model/dto/EmployeeDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/model/dto/PositionDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/model/filter/EmployeeFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/model/filter/EmployeeFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/model/request/EmployeeRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/model/request/EmployeeRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/repository/EmployeeRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/repository/PositionRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/service/DemoService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/service/EmployeeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/service/EmployeeService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/service/PositionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/service/PositionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/source/data/EmployeeServiceDao.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/source/data/PositionServiceDao.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/source/data/impl/EmployeeServiceDaoImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/source/data/impl/PositionServiceDaoImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/source/model/Employee.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/HR_ManagementSystem/source/model/Position.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/js/script.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/employees.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/employees.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +105,6 @@
       <list>
         <option value="HTML File" />
         <option value="JavaScript File" />
-        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -88,7 +132,7 @@
     </excluded-from-favorite>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="restAPI" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -105,21 +149,25 @@
     &quot;accountId&quot;: &quot;a6bd0960-7060-4016-bc43-f5fcb4208506&quot;
   }
 }</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="2eluWMjH9S3uJLBDms5WpP20Vpe" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
-    <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
+    "HTTP Request.generated-requests | #5.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -127,9 +175,8 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.Run.executor": "Debug",
+    "Spring Boot.Main.executor": "Debug",
     "git-widget-placeholder": "enhancement/hibernate-to-spring-refactor",
-    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/macbookpro/IdeaProjects/HRManagementSystem",
     "node.js.detected.package.eslint": "true",
@@ -148,31 +195,37 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\IJ\New folder1\HR Management System\src\main\resources\static\css" />
-      <recent name="D:\IJ\New folder1\HR Management System\src\main\resources\static" />
-      <recent name="D:\IJ\New folder1\HR Management System\src\main\resources\static\js" />
-      <recent name="D:\IJ\New folder1\HR Management System\src\main\resources\templates" />
-      <recent name="D:\IJ\New folder1\HR Management System\src\main\resources\static\" />
+      <recent name="$PROJECT_DIR$/src/main/resources/templates/" />
+      <recent name="$PROJECT_DIR$/src/main/resources/templates/ff" />
+      <recent name="$PROJECT_DIR$/src/main/resources/templates" />
+      <recent name="$PROJECT_DIR$/src/main/resources/static" />
+      <recent name="$PROJECT_DIR$/src/main/resources/static/css" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="org.example.HR_ManagementSystem.dao.service" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="Run" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <component name="RunManager" selected="Spring Boot.Main">
+    <configuration name="generated-requests | #5" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="5" requestIdentifier="#5" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="Main" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="HR_Management_System" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.HR_ManagementSystem.Main" />
-      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
-        <option name="credential" />
-        <option name="region" />
-        <option name="useCurrentConnection" value="false" />
-      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.generated-requests | #5" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-17.0.10-corretto-17.0.10-4caba194b151-5cd809f4" />
+        <option value="jdk-17.0.10-corretto-17.0.10-f644763e9732-24582b8d" />
       </set>
     </attachedChunks>
   </component>
@@ -190,7 +243,13 @@
       <workItem from="1713879264539" duration="2555000" />
       <workItem from="1714034895227" duration="208000" />
       <workItem from="1714843176731" duration="1712000" />
-      <workItem from="1714979378966" duration="28628000" />
+      <workItem from="1715061601956" duration="9792000" />
+      <workItem from="1715072871933" duration="78000" />
+      <workItem from="1715074184593" duration="36989000" />
+      <workItem from="1715178739617" duration="70453000" />
+      <workItem from="1715691412055" duration="64000" />
+      <workItem from="1715691515914" duration="6289000" />
+      <workItem from="1715702542022" duration="115964000" />
     </task>
     <task id="LOCAL-00001" summary="refactor: change structure of the project">
       <option name="closed" value="true" />

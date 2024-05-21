@@ -1,15 +1,18 @@
 package org.example.HR_ManagementSystem.model.filter;
 
+import org.springframework.stereotype.Component;
+
 import java.time.ZonedDateTime;
 
+@Component
 public class EmployeeFilter {
 
     private String fio;
     private ZonedDateTime startDate;
     private ZonedDateTime endDate;
     private String positionName;
-    private Boolean terminates;
     private Boolean sort;
+    private Boolean terminates;
 
     public EmployeeFilter() {
     }

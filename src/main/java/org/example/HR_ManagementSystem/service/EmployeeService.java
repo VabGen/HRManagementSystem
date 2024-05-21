@@ -1,15 +1,16 @@
 package org.example.HR_ManagementSystem.service;
 
+import org.example.HR_ManagementSystem.dao.entity.Employee;
+import org.example.HR_ManagementSystem.dao.service.EmployeeServiceDao;
+import org.example.HR_ManagementSystem.dto.EmployeeDto;
+import org.example.HR_ManagementSystem.dto.mapper.EmployeeMapper;
 import org.example.HR_ManagementSystem.model.filter.EmployeeFilter;
 import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
-import org.example.HR_ManagementSystem.source.data.EmployeeServiceDao;
-import org.example.HR_ManagementSystem.source.data.PositionServiceDao;
-import org.example.HR_ManagementSystem.source.model.Employee;
-import org.example.HR_ManagementSystem.source.model.Position;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,65 +19,62 @@ import java.util.stream.Collectors;
 public class EmployeeService {
 
     private final EmployeeServiceDao employeeDAO;
-    private final PositionServiceDao positionDAO;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public EmployeeService(@Qualifier("employeeServiceDao")EmployeeServiceDao employeeDAO, PositionServiceDao positionDAO, ModelMapper modelMapper) {
+    public EmployeeService(EmployeeServiceDao employeeDAO) {
         this.employeeDAO = employeeDAO;
-        this.positionDAO = positionDAO;
-        this.modelMapper = modelMapper;
     }
 
-    public Employee create(EmployeeRequest request) {
-        Position position = positionDAO.findById(request.getPositionId());
-        Employee employee = modelMapper.map(request, Employee.class);
-        employee.setPosition(position);
-        employeeDAO.create(employee);
-        return employee;
+    @Transactional(rollbackFor = Exception.class)
+    public EmployeeDto create(EmployeeRequest request) {
+        Employee employee = EmployeeMapper.requestToEntity(request);
+        Employee newEmployee = employeeDAO.create(employee);
+        return EmployeeMapper.entityToDto(newEmployee);
     }
 
-    public List<EmployeeRequest> getAllEmployees() {
-        List<Employee> employees = employeeDAO.findAll();
-        return employees.stream()
-                .map(employee -> modelMapper.map(employee, EmployeeRequest.class))
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public List<EmployeeDto> read() {
+        List<Employee> employees = employeeDAO.read();
+        return employees.stream().map(EmployeeMapper::entityToDto).collect(Collectors.toList());
     }
 
-    public Employee update(Long id, EmployeeRequest request) {
-        Employee employee = employeeDAO.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-        modelMapper.map(request, employee);
-        Position position = positionDAO.findById(request.getPositionId());
-        employee.setPosition(position);
-        employeeDAO.create(employee);
-        return employee;
+    @Transactional(rollbackFor = Exception.class)
+    public EmployeeDto update(EmployeeRequest request) {
+        Employee existingEmployee = employeeDAO.findById(request.getId());
+        if (existingEmployee == null) {
+            throw new RuntimeException("Employee not found");
+        }
+        Employee autoCopyRequestToEntity = EmployeeMapper.copy(request, existingEmployee);
+        Employee updatedEntity = employeeDAO.update(autoCopyRequestToEntity);
+        return EmployeeMapper.entityToDto(updatedEntity);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        Employee employee = employeeDAO.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-        employeeDAO.delete(employee);
+        employeeDAO.delete(id);
     }
 
-    public EmployeeRequest getEmployeeById(Long id) {
-        Employee employee = employeeDAO.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-        return modelMapper.map(employee, EmployeeRequest.class);
+    @Transactional
+    public EmployeeDto findById(Long id) {
+        Employee employee = employeeDAO.findById(id);
+        return EmployeeMapper.entityToDto(employee);
     }
 
-    public EmployeeRequest terminate(Long id){
-        System.out.println("I terminate" + id);
-        return null;
+    @Transactional(readOnly = true)
+    public List<EmployeeDto> filter(EmployeeFilter filter, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Employee> employeePage = employeeDAO.filter(filter, pageable);
+        return employeePage.stream().map(EmployeeMapper::entityToDto).collect(Collectors.toList());
     }
 
-    public EmployeeRequest terminated(){
-        System.out.println("I terminated");
-        return null;
-    }
-
-    public List<EmployeeRequest> findAll(EmployeeFilter filter){
-        System.out.println("I terminated" + filter);
-        return null;
+    @Transactional(rollbackFor = Exception.class)
+    public EmployeeDto terminate(Long id) {
+        Employee employee = employeeDAO.findById(id);
+        if (employee == null) {
+            throw new RuntimeException("Employee not found");
+        }
+        employee.setTerminated(true);
+        Employee updatedTerminate = employeeDAO.terminate(employee);
+        return EmployeeMapper.entityToDto(updatedTerminate);
     }
 }

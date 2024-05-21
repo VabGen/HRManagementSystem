@@ -1,23 +1,24 @@
 package org.example.HR_ManagementSystem.configuration;
 
-import org.example.HR_ManagementSystem.service.DemoService;
-import org.modelmapper.ModelMapper;
+import org.example.HR_ManagementSystem.console.MenuDisplay;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
 
-    @Bean
-    public DemoService demoService() {
-        return new DemoService();
+    MenuDisplay menuDisplay;
+
+    public AppConfig(MenuDisplay menuDisplay) {
+        this.menuDisplay = menuDisplay;
     }
 
     @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
+    CommandLineRunner runner() {
+        return args -> {
+            menuDisplay.doDisplay();
+        };
     }
-
-
 }
 

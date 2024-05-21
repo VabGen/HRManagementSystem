@@ -4,15 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.HR_ManagementSystem.exception.ExceptionHandler;
-import org.example.HR_ManagementSystem.model.dto.EmployeeDTO;
+import org.example.HR_ManagementSystem.dto.EmployeeDto;
 import org.example.HR_ManagementSystem.model.filter.EmployeeFilter;
-import org.example.HR_ManagementSystem.model.request.EmployeeRequest;
 import org.example.HR_ManagementSystem.service.EmployeeService;
-import org.example.HR_ManagementSystem.source.data.EmployeeServiceDao;
-import org.example.HR_ManagementSystem.source.data.impl.EmployeeServiceDaoImpl;
-import org.hibernate.SessionFactory;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,15 +19,13 @@ import java.util.Scanner;
 @Component
 public class EmployeesByFilterDisplay {
 
-    private final EmployeeServiceDao employeeServiceDao;
-    private final EmployeeService employeeService;
+    EmployeeService employeeService;
     Scanner scanner = new Scanner(System.in);
     ObjectMapper objectMapper;
 
     @Autowired
-    public EmployeesByFilterDisplay(EmployeeServiceDao employeeServiceDao, EmployeeService employeeService) {
+    public EmployeesByFilterDisplay(EmployeeService employeeService) {
         this.employeeService = employeeService;
-        this.employeeServiceDao = employeeServiceDao;
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
@@ -52,7 +44,6 @@ public class EmployeesByFilterDisplay {
         String startDateInput = scanner.nextLine();
         Instant startDate = null;
         ZonedDateTime startDateTime = null;
-
         if (!startDateInput.isEmpty()) {
             startDate = Instant.parse(startDateInput);
             startDateTime = ZonedDateTime.ofInstant(startDate, ZoneId.systemDefault());
@@ -62,7 +53,6 @@ public class EmployeesByFilterDisplay {
         String endDateInput = scanner.nextLine();
         Instant endDate = null;
         ZonedDateTime endDateTime = null;
-
         if (!endDateInput.isEmpty()) {
             endDate = Instant.parse(endDateInput);
             endDateTime = ZonedDateTime.ofInstant(endDate, ZoneId.systemDefault());
@@ -89,12 +79,12 @@ public class EmployeesByFilterDisplay {
         filter.setTerminates(terminates);
 
         try {
-            List<EmployeeRequest> employeeList = employeeService.findAll(filter);
-            for (EmployeeRequest employee : employeeList) {
+            List<EmployeeDto> employeeList = employeeService.filter(filter, 0, 30);
+            for (EmployeeDto employee : employeeList) {
                 System.out.println(objectMapper.writeValueAsString(employee));
             }
         } catch (RuntimeException e) {
-            ExceptionHandler.handleException(e);
+            org.example.HR_ManagementSystem.exception.ExceptionHandler.handleException(e);
         }
     }
 }
