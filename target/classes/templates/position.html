@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Positions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script defer type="text/javascript" src="../static/js/scriptPosition.js"></script>
+</head>
+<body>
+<header class="container mt-5 text-center">
+    <h2 class="mb-4">Positions</h2>
+</header>
+<main class="container">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="positions : ${position}" th:object="${positions}">
+                <td th:text="*{id}">1</td>
+                <td th:text="*{name}">NoValue</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="readPosition()">Get</button>
+                    <button class="btn btn-primary btn-sm" onclick="updatePosition(this)">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deletePosition(this)">Delete</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="out"></p>
+    </div>
+    <a href="positionForm.html" onclick="addPosition()" class="btn btn-success">Add Position</a>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

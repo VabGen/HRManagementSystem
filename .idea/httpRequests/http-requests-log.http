@@ -1,0 +1,9 @@
+GET http://localhost:8080/api/positions/position
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-05-15T224858.200.txt
+
+###
+

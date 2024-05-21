@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Employee</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h2>Edit Employee</h2>
+  <form action="/api/employee" method="post">
+    <div class="form-group">
+      <label for="employeeName">Имя:</label>
+      <input type="text" id="employeeName" name="employeeName" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="employeePosition">Должность:</label>
+      <input type="text" id="employeePosition" name="employeePosition" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+</div>
+</body>
+</html>
